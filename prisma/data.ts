@@ -1,0 +1,15 @@
+export const moods = [
+  { name: "Happy", emoji: "😊", color: "#FFD700" },
+  { name: "Sad", emoji: "😢", color: "#1E90FF" },
+  { name: "Excited", emoji: "🤩", color: "#FF4500" },
+  { name: "Angry", emoji: "😠", color: "#DC143C" },
+  { name: "Relaxed", emoji: "😌", color: "#008B8B" },
+  { name: "Anxious", emoji: "😰", color: "#708090" },
+  { name: "Bored", emoji: "😐", color: "#A9A9A9" },
+  { name: "Surprised", emoji: "😲", color: "#FFA500" },
+  { name: "Confused", emoji: "😕", color: "#DAA520" },
+  { name: "Motivated", emoji: "💪", color: "#4B0082" },
+  { name: "Sleepy", emoji: "😴", color: "#483D8B" },
+  { name: "Love", emoji: "❤️", color: "#FF69B4" },
+  { name: "Grateful", emoji: "🙏", color: "#2E8B57" },
+]

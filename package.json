@@ -2,23 +2,47 @@
   "name": "ephemr",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "main": "server/server.ts",
+  "prisma": {
+    "seed": "ts-node-esm prisma/seed.ts"
+  },
   "scripts": {
-    "dev": "next dev",
+    "dev": "nodemon --esm --transpile-only",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "cross-env NODE_ENV=production nodemon --esm",
+    "lint": "next lint",
+    "postinstall": "prisma generate && prisma db push --accept-data-loss"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.0.1",
+    "@dicebear/core": "^9.0.1",
+    "@prisma/client": "^5.16.1",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
+    "html-react-parser": "^5.1.10",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^14.2.5",
+    "prisma": "^5.16.1",
     "react": "^18",
+    "react-bootstrap-icons": "^1.11.4",
     "react-dom": "^18",
-    "next": "14.2.3"
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "styled-components": "^6.1.11"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.14.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
   }
 }
