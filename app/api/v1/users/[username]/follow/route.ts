@@ -83,7 +83,7 @@ export async function POST(
 
     const socketIo =
       sockets &&
-      io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000")
+      io(process.env.SOCKET_URL || "http://localhost:3000")
 
     socketIo.emit("new-follow", {
       user: {

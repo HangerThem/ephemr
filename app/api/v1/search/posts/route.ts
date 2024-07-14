@@ -31,7 +31,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       where: {
         content: {
           contains: query,
-          mode: "insensitive",
         },
       },
       select: {

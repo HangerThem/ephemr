@@ -53,6 +53,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         settings: {
           create: {},
         },
+        userInformation: {
+          create: {},
+        },
       },
     })
 

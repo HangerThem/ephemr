@@ -86,8 +86,6 @@ app.prepare().then(() => {
   httpServer
     .once("error", async (err) => {
       console.error(err)
-      await prisma.userSession.deleteMany()
-      await prisma.$disconnect()
       process.exit(1)
     })
     .listen(port, () => {

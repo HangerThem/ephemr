@@ -68,19 +68,6 @@ export default function Page() {
           />
           <FormLabel>Email</FormLabel>
         </FormField>
-        <FormField>
-          <FormArea defaultValue={user?.bio} name="bio" onBlur={handleUpdate} />
-          <FormLabel>Bio</FormLabel>
-        </FormField>
-        <FormField>
-          <FormInput
-            type="text"
-            defaultValue={user?.pronouns}
-            name="pronouns"
-            onBlur={handleUpdate}
-          />
-          <FormLabel>Pronouns</FormLabel>
-        </FormField>
       </section>
     </div>
   )

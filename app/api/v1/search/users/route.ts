@@ -16,13 +16,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
           {
             username: {
               contains: query,
-              mode: "insensitive",
+                            
             },
           },
           {
             displayName: {
               contains: query,
-              mode: "insensitive",
             },
           },
         ],
