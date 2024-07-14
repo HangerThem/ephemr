@@ -43,3 +43,23 @@ export const requestRegister = async (
     ...user,
   })
 }
+
+export const requestVerify = async (
+  token: string
+): Promise<
+  | {
+      status: number
+      message: string
+    }
+  | IErrorResponse
+> => {
+  return await post<
+    | {
+        status: number
+        message: string
+      }
+    | IErrorResponse
+  >("/auth/verify", {
+    token,
+  })
+}

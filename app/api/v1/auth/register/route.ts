@@ -6,6 +6,7 @@ import {
   badRequestResponse,
   conflictResponse,
 } from "@/helpers/apiHelper"
+import { sendEmail } from "@/utils/emailUtils"
 import { generateNewTokens } from "@/utils/jwt"
 import { hashPassword } from "@/utils/bcryptjs"
 import { NextRequest, NextResponse } from "next/server"
@@ -43,6 +44,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     const hashedPassword = await hashPassword(password)
+    const verificationCode = Math.floor(100000 + Math.random() * 900000)
 
     const user = await prisma.user.create({
       data: {
@@ -50,6 +52,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         username,
         displayName,
         password: hashedPassword,
+        verificationCode,
         settings: {
           create: {},
         },
@@ -57,6 +60,77 @@ export async function POST(req: NextRequest, res: NextResponse) {
           create: {},
         },
       },
+    })
+
+    await sendEmail({
+      to: email,
+      subject: "Verify your Ephemr account",
+      text: `A new account has been created with the email ${email}. Please verify your account with the code ${verificationCode}. If you didn't initiate this action, please disregard this email or contact our support team at support@ephemr.net.`,
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=K2D:wght@400&display=swap" rel="stylesheet">
+            <style>
+              body {
+                font-family: 'K2D', Arial, sans-serif;
+                background-color: #0c0c11;
+                color: #fff;
+                margin: 0;
+                padding: 0;
+              }
+              .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+              }
+              .header {
+                background-color: #212121;
+                color: #3498db;
+                text-align: center;
+                padding: 20px 0;
+              }
+              .content {
+                padding: 20px;
+                background-color: #0c0c11;
+              }
+              .code-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #3498db;
+                font-size: 24px;
+                letter-spacing: 8px;
+              }
+              .link {
+                display: inline-block;
+                cursor: pointer;
+                color: #3498db;
+                text-decoration: none;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>Welcome to Ephemr</h1>
+              </div>
+              <div class="content">
+                <p>Hello ${username},</p>
+                <p>A new account has been created with the email ${email}. Please use the verification code below to activate your account:</p>
+                <div class="code-container">
+                  ${verificationCode}
+                </div>
+                <p><i>If you didn't initiate this action, please disregard this email or contact our support team at <a href="mailto:support@ephemr.net" class="link">support@ephemr.net</a>.</i></p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
     })
 
     const { token, newRefreshToken } = generateNewTokens(user.id)

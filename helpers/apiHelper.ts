@@ -112,8 +112,8 @@ export function paymentRequiredResponse() {
   return jsonResponse(402, { error: "Payment required" })
 }
 
-export function forbiddenResponse() {
-  return jsonResponse(403, { error: "Forbidden" })
+export function forbiddenResponse(errorMessage?: string) {
+  return jsonResponse(403, { error: errorMessage ?? "Forbidden" })
 }
 
 export function notFoundResponse(errorMessage?: string) {

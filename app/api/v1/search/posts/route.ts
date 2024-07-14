@@ -8,9 +8,9 @@ import {
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const query = decodeURIComponent(req.url.split("q=")[1])
-
   try {
+    const query = decodeURIComponent(req.url.split("q=")[1])
+    
     const authHeader = req.headers.get("Authorization")
     const token =
       authHeader && authHeader.startsWith("Bearer ")

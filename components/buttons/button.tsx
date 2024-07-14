@@ -1,17 +1,19 @@
 import Link from "next/link"
 import styled from "styled-components"
+import DotLoader from "@/components/loaders/dotLoader"
 
 const ButtonWrapper = styled.button`
   color: rgb(var(--light));
   border: none;
   border-radius: 5px;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   font-size: 0.8rem;
+  height: 35px;
   font-weight: 500;
   transition: background-color 0.2s ease;
   width: 100%;
@@ -45,10 +47,16 @@ const ButtonWrapper = styled.button`
   &:hover {
     background-color: rgba(var(--light), 0.2);
   }
+
+  &:disabled {
+    cursor: default;
+    background-color: rgba(var(--light), 0.1);
+  }
 `
 
 interface ButtonProps {
   children: React.ReactNode
+  loading?: boolean
   size?: "small" | "medium" | "large" | "full"
   type?: "button" | "submit" | "reset"
   className?: string
@@ -59,6 +67,7 @@ interface ButtonProps {
 
 export default function Button({
   children,
+  loading = false,
   size = "medium",
   type = "button",
   className,
@@ -85,8 +94,15 @@ export default function Button({
       className={className + " " + size}
       type={type}
       onClick={onClick}
+      disabled={loading}
     >
-      {icon} {children}
+      {loading ? (
+        <DotLoader />
+      ) : (
+        <>
+          {icon} {children}
+        </>
+      )}
     </ButtonWrapper>
   )
 }

@@ -9,4 +9,8 @@ export const PageContainer = styled.div`
   align-items: center;
   overflow-y: auto;
   position: relative;
+
+  &.center {
+    justify-content: center;
+  }
 `

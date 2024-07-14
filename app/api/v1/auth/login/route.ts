@@ -6,6 +6,7 @@ import {
   unauthorizedResponse,
   badRequestResponse,
   notFoundResponse,
+  forbiddenResponse,
 } from "@/helpers/apiHelper"
 import { generateNewTokens } from "@/utils/jwt"
 import { verifyPassword } from "@/utils/bcryptjs"
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return badRequestResponse("Missing required fields")
     }
 
-    const userExists = await prisma.user.findFirst({
+    const userVerified = await prisma.user.findFirst({
       where: {
         OR: [
           {
@@ -29,19 +30,41 @@ export async function POST(req: NextRequest, res: NextResponse) {
           },
         ],
       },
+      select: {
+        verified: true,
+        id: true,
+      },
     })
 
-    if (!userExists) {
+    if (!userVerified) {
       return notFoundResponse("User not found")
     }
 
-    const passwordMatch = await verifyPassword(password, userExists.password)
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userVerified.id,
+      },
+      select: {
+        id: true,
+        password: true,
+      },
+    })
+
+    if (!user) {
+      return internalServerErrorResponse()
+    }
+
+    const passwordMatch = await verifyPassword(password, user.password)
 
     if (!passwordMatch) {
       return unauthorizedResponse("Invalid username or password")
     }
 
-    const { token, newRefreshToken } = generateNewTokens(userExists.id)
+    if (!userVerified.verified) {
+      return forbiddenResponse("User not verified")
+    }
+
+    const { token, newRefreshToken } = generateNewTokens(user.id)
 
     return successResponse({ token, refreshToken: newRefreshToken })
   } catch (e) {

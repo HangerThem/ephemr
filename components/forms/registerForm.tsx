@@ -1,3 +1,5 @@
+"use client"
+
 import { useAuth } from "@/context/authContext"
 import {
   Form,
@@ -16,14 +18,11 @@ import {
 import Button from "@/components/buttons/button"
 import { useState } from "react"
 
-interface RegisterFormProps {
-  toggleLogin: () => void
-}
-
-export default function RegisterForm({ toggleLogin }: RegisterFormProps) {
+export default function RegisterForm() {
   const { register, toggleModal } = useAuth()
   const [errors, setErrors] = useState<RegisterResponse>()
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const togglePassword = () => {
     setShowPassword(!showPassword)
@@ -31,6 +30,7 @@ export default function RegisterForm({ toggleLogin }: RegisterFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     const target = e.target as typeof e.target & {
       email: { value: string }
       username: { value: string }
@@ -51,6 +51,7 @@ export default function RegisterForm({ toggleLogin }: RegisterFormProps) {
       password,
       passwordConfirm
     )
+    setLoading(false)
 
     if (
       response.emailInUse ||
@@ -149,12 +150,11 @@ export default function RegisterForm({ toggleLogin }: RegisterFormProps) {
         />
         <FormLabel htmlFor="passwordConfirm">Confirm Password</FormLabel>
       </FormField>
-      <Button type="submit" className="full">
+      <Button type="submit" size="full" loading={loading}>
         Register
       </Button>
       <FormText>
-        Already have an account?{" "}
-        <FormLink onClick={toggleLogin}>Login</FormLink>
+        Already have an account? <FormLink href="/login">Login</FormLink>
       </FormText>
     </Form>
   )

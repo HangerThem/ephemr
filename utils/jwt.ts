@@ -4,6 +4,27 @@ const JWT_SECRET = process.env.JWT_SECRET
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET
 
 /**
+ * Generates a new token using the JWT_SECRET.
+ *
+ * @param payload - The payload to be encoded in the token.
+ * @param expiresIn - The time in which the token will expire.
+ * @returns The generated token.
+ * @throws Error if JWT_SECRET is not set.
+ */
+export const generateToken = ({
+  payload,
+  expiresIn,
+}: {
+  payload: any
+  expiresIn?: string
+}) => {
+  if (!JWT_SECRET) {
+    throw new Error("JWT_SECRET is not set")
+  }
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: expiresIn || "" })
+}
+
+/**
  * Verifies the provided refresh token using the JWT_REFRESH_SECRET.
  *
  * @param refreshToken - The refresh token to be verified.

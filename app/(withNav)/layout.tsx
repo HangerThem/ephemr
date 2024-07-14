@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { K2D } from "next/font/google"
 import { ToastProvider } from "@/context/toastContext"
 import { AuthProvider } from "@/context/authContext"
-import { GlobalStyle } from "@/styles/global"
+import { GlobalStyle, WithNavContainer } from "@/styles/global"
 import StyledComponentsRegistry from "@/lib/registry"
 import Sidebar from "@/components/layout/sidebar"
 import AuthModal from "@/components/modals/authModal"
@@ -31,13 +31,15 @@ export default function RootLayout({
             <StyledComponentsRegistry>
               <GlobalStyle />
               <body className={k2d.className}>
-                <ToastContainer />
-                <AuthModal />
-                <Sidebar />
-                <PageContainer>
-                  <Header />
-                  {children}
-                </PageContainer>
+                <WithNavContainer>
+                  <ToastContainer />
+                  <AuthModal />
+                  <Sidebar />
+                  <PageContainer>
+                    <Header />
+                    {children}
+                  </PageContainer>
+                </WithNavContainer>
               </body>
             </StyledComponentsRegistry>
           </AuthProvider>

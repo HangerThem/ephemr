@@ -8,30 +8,34 @@ generator client {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  email           String           @unique
-  username        String           @unique
-  displayName     String
-  password        String
-  online          Boolean          @default(false)
-  lastSeen        DateTime?
-  private         Boolean          @default(false)
-  profilePic      String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  posts           Post[]
-  postLikes       PostLike[]
-  commentLikes    CommentLike[]
-  comments        Comment[]
-  conversations   Conversation[]   @relation("UserToConversation")
-  sentMessages    Message[]
-  mood            Mood?            @relation(fields: [moodId], references: [id])
-  moodId          String?
-  following       Follow[]         @relation("Follower")
-  followers       Follow[]         @relation("Followee")
-  settings        Settings?        @relation("UserToSettings")
-  userSession     UserSession[]
-  userInformation UserInformation? @relation("UserToUserInformation")
+  id               String           @id @default(cuid())
+  email            String           @unique
+  username         String           @unique
+  displayName      String
+  password         String
+  online           Boolean          @default(false)
+  lastSeen         DateTime?
+  private          Boolean          @default(false)
+  verified         Boolean          @default(false)
+  verificationCode Int?
+  resetToken       String?          @unique
+  resetTokenExpiry DateTime?
+  profilePic       String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  posts            Post[]
+  postLikes        PostLike[]
+  commentLikes     CommentLike[]
+  comments         Comment[]
+  conversations    Conversation[]   @relation("UserToConversation")
+  sentMessages     Message[]
+  mood             Mood?            @relation(fields: [moodId], references: [id])
+  moodId           String?
+  following        Follow[]         @relation("Follower")
+  followers        Follow[]         @relation("Followee")
+  settings         Settings?        @relation("UserToSettings")
+  userSession      UserSession[]
+  userInformation  UserInformation? @relation("UserToUserInformation")
 }
 
 model Follow {

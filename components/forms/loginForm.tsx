@@ -1,3 +1,5 @@
+"use client"
+
 import { useAuth } from "@/context/authContext"
 import {
   Form,
@@ -16,14 +18,11 @@ import {
 import Button from "@/components/buttons/button"
 import { useState } from "react"
 
-interface LoginFormProps {
-  toggleLogin: () => void
-}
-
-export default function LoginForm({ toggleLogin }: LoginFormProps) {
+export default function LoginForm() {
   const { login, toggleModal } = useAuth()
   const [errors, setErrors] = useState<LoginResponse>()
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const togglePassword = () => {
     setShowPassword(!showPassword)
@@ -31,6 +30,7 @@ export default function LoginForm({ toggleLogin }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     const target = e.target as typeof e.target & {
       emailOrUsername: { value: string }
       password: { value: string }
@@ -38,6 +38,7 @@ export default function LoginForm({ toggleLogin }: LoginFormProps) {
     const emailOrUsername = target.emailOrUsername.value
     const password = target.password.value
     const response = await login(emailOrUsername, password)
+    setLoading(false)
     if (
       response.invalidUsernameOrEmail ||
       response.userNotFound ||
@@ -100,12 +101,12 @@ export default function LoginForm({ toggleLogin }: LoginFormProps) {
           <ErrorMessage className="error">Incorrect password</ErrorMessage>
         )}
       </FormField>
-      <Button type="submit" size="full">
+      <Button type="submit" size="full" loading={loading}>
         Login
       </Button>
       <FormText>
         Don&apos;t have an account?{" "}
-        <FormLink onClick={toggleLogin}>Register</FormLink>
+        <FormLink href="/register/basic">Register</FormLink>
       </FormText>
     </Form>
   )

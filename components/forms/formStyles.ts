@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { EyeFill, EyeSlashFill, X } from "react-bootstrap-icons"
+import Link from "next/link"
 
 export const Form = styled.form`
   display: flex;
@@ -141,8 +142,9 @@ export const FormText = styled.p`
   color: rgba(var(--light), 0.5);
 `
 
-export const FormLink = styled.span`
+export const FormLink = styled(Link)`
   color: rgb(var(--primary));
+  text-decoration: none;
   cursor: pointer;
 
   &:hover {

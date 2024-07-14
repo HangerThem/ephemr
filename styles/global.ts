@@ -1,6 +1,7 @@
 "use client"
 
 import { createGlobalStyle } from "styled-components"
+import styled from "styled-components"
 
 export const GlobalStyle = createGlobalStyle`
   :root {
@@ -28,9 +29,6 @@ export const GlobalStyle = createGlobalStyle`
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--light));
-    display: grid;
-    grid-template-columns: 1fr 7fr;
-    grid-template-rows: 100%;
     min-height: 100vh;
   }
 
@@ -80,4 +78,10 @@ export const GlobalStyle = createGlobalStyle`
     background-color: rgb(var(--primary));
     color: rgb(var(--light));
   }
+`
+
+export const WithNavContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 7fr;
+  grid-template-rows: 100%;
 `

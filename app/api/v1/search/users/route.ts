@@ -7,16 +7,15 @@ import {
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const query = decodeURIComponent(req.url.split("q=")[1])
-
   try {
+    const query = decodeURIComponent(req.url.split("q=")[1])
+
     const users = await prisma.user.findMany({
       where: {
         OR: [
           {
             username: {
               contains: query,
-                            
             },
           },
           {

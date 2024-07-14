@@ -2,21 +2,19 @@
 
 import { ModalContainer } from "@/components/modals/modalStyles"
 import { useAuth } from "@/context/authContext"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import LoginForm from "@/components/forms/loginForm"
 import RegisterForm from "@/components/forms/registerForm"
 
 const AuthModal = () => {
   const { modalOpen, toggleModal } = useAuth()
   const modalRef = useRef<HTMLDialogElement>(null)
-  const [login, setLogin] = useState(true)
 
   useEffect(() => {
     if (modalOpen) {
       modalRef.current?.showModal()
     } else {
       modalRef.current?.close()
-      setLogin(true)
     }
   }, [modalOpen])
 
@@ -30,11 +28,7 @@ const AuthModal = () => {
 
   return (
     <ModalContainer ref={modalRef}>
-      {login ? (
-        <LoginForm toggleLogin={() => setLogin(false)} />
-      ) : (
-        <RegisterForm toggleLogin={() => setLogin(true)} />
-      )}
+      <LoginForm />
     </ModalContainer>
   )
 }

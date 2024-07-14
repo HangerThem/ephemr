@@ -10,6 +10,7 @@ import {
   requestRegister,
 } from "@/services/api-services/authService"
 import { isError } from "@/utils/isError"
+import { useRouter } from "next/navigation"
 import { requestTokens } from "@/services/api-services/tokenService"
 
 interface AuthContextProps {
@@ -55,6 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const { addToastNotification } = useToast()
   const { disconnect, connect } = useSocketContext()
+  const router = useRouter()
 
   useEffect(() => {
     try {
@@ -107,6 +109,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           if (res.status === 401) {
             response.incorrectPassword = true
             throw new Error("Unauthorized")
+          }
+          if (res.status === 403) {
+            router.push("/register/verify")
+            sessionStorage.setItem("ephemrUsernameOrEmail", usernameOrEmail)
+            throw new Error("User not verified")
           }
           if (res.status === 404) {
             response.userNotFound = true
