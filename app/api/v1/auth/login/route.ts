@@ -31,8 +31,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         ],
       },
       select: {
-        verified: true,
         id: true,
+        verified: true,
       },
     })
 
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
       select: {
         id: true,
+        email: true,
         password: true,
       },
     })

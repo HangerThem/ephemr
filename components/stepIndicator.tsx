@@ -107,7 +107,7 @@ const StepIndicator = () => {
         <IndicatorText
           className={step === 3 ? "active" : step > 3 ? "done" : ""}
         >
-          Complete
+          Details
         </IndicatorText>
       </IndicatorItem>
     </IndicatorContainer>

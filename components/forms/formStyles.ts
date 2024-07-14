@@ -74,6 +74,31 @@ export const FormInput = styled.input`
   }
 `
 
+export const FormCodeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+`
+
+export const FormCodeInput = styled.input`
+  background-color: transparent;
+  border: 1px solid rgba(var(--light), 0.2);
+  border-radius: 5px;
+  color: rgb(var(--light));
+  font-size: 1.25rem;
+  width: 32px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  outline: none;
+  transition: border 0.2s ease;
+
+  &:focus {
+    border: 1px solid rgb(var(--light));
+  }
+`
+
 export const FormArea = styled.textarea`
   width: 100%;
   background-color: rgba(var(--light), 0.1);
@@ -104,6 +129,14 @@ export const FormField = styled.div`
 
   &.error {
     ${FormInput} {
+      border: 1px solid rgb(var(--danger));
+    }
+
+    ${FormArea} {
+      border: 1px solid rgb(var(--danger));
+    }
+
+    ${FormCodeInput} {
       border: 1px solid rgb(var(--danger));
     }
 

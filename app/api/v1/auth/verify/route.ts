@@ -10,30 +10,46 @@ import {
 
 export async function POST(req: any) {
   try {
-    const { userId, code } = await req.json()
+    const { usernameOrEmail, code } = await req.json()
 
-    if (!userId) {
-      return badRequestResponse("User ID is required")
+    if (!usernameOrEmail) {
+      return badRequestResponse("Username or email is required")
     }
 
     if (!code) {
       return badRequestResponse("Code is required")
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
-        id: userId,
-        verificationCode: code,
+        OR: [
+          {
+            username: usernameOrEmail,
+          },
+          {
+            email: usernameOrEmail,
+          },
+        ],
+      },
+      select: {
+        id: true,
+        verificationCode: true,
+        email: true,
+        username: true,
       },
     })
 
     if (!user) {
+      return unauthorizedResponse("User not found")
+    }
+
+    if (user.verificationCode !== code) {
       return unauthorizedResponse("Invalid code")
     }
 
     await prisma.user.update({
       where: {
-        id: userId,
+        id: user.id,
       },
       data: {
         verified: true,

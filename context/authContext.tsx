@@ -111,8 +111,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             throw new Error("Unauthorized")
           }
           if (res.status === 403) {
-            router.push("/register/verify")
-            sessionStorage.setItem("ephemrUsernameOrEmail", usernameOrEmail)
+            localStorage.setItem("ephemrUsernameOrEmail", usernameOrEmail)
+            router.push("/login/verify")
             throw new Error("User not verified")
           }
           if (res.status === 404) {
@@ -258,19 +258,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             })
             throw new Error("Server error")
           }
-
-          return response
         }
 
-        const { token, refreshToken } = res
-        setTokens(token, refreshToken)
-        await getUser()
-        setModalOpen(false)
-        addToastNotification({
-          type: "success",
-          title: "Welcome!",
-          description: "You have successfully registered and logged in",
-        })
+        localStorage.setItem("ephemrUsernameOrEmail", email)
+        router.push("/register/verify")
       })
       .catch((err) => {
         console.error(err)

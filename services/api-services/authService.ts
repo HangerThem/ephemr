@@ -1,4 +1,4 @@
-import { post } from "../requestHelpers"
+import { get, post } from "../requestHelpers"
 
 export const requestLogin = async (
   user: ILoginUser
@@ -45,7 +45,8 @@ export const requestRegister = async (
 }
 
 export const requestVerify = async (
-  token: string
+  usernameOrEmail: string,
+  code: string
 ): Promise<
   | {
       status: number
@@ -60,6 +61,25 @@ export const requestVerify = async (
       }
     | IErrorResponse
   >("/auth/verify", {
-    token,
+    usernameOrEmail,
+    code,
   })
+}
+
+export const requestEmail = async (
+  username: string
+): Promise<
+  | {
+      status: number
+      email: string
+    }
+  | IErrorResponse
+> => {
+  return await get<
+    | {
+        status: number
+        email: string
+      }
+    | IErrorResponse
+  >(`/auth/email?username=${username}`)
 }

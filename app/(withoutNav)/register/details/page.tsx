@@ -9,13 +9,12 @@ export default function Page() {
   const { setStep } = useRegisterContext()
 
   useEffect(() => {
-    setStep(1)
+    setStep(3)
   }, [])
 
   return (
     <>
-      <RegisterForm />
-      <Link href="/register/verify">Next</Link>
+      <Link href="/register/basic">Next</Link>
     </>
   )
 }

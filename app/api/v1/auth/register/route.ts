@@ -62,10 +62,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     })
 
+    const returnLink = `${
+      process.env.BASE_URL
+    }/register/verify?email=${encodeURIComponent(
+      email
+    )}&code=${verificationCode}`
+
     await sendEmail({
       to: email,
       subject: "Verify your Ephemr account",
-      text: `A new account has been created with the email ${email}. Please verify your account with the code ${verificationCode}. If you didn't initiate this action, please disregard this email or contact our support team at support@ephemr.net.`,
+      text: `A new account has been created with the email ${email}. Please verify your account with the code ${verificationCode}. If you lost the page, you can return to the verification page by clicking this link: ${returnLink}. If you didn't initiate this action, please disregard this email or contact our support team at support@ephemr.net.`,
       html: `
         <!DOCTYPE html>
         <html lang="en">
@@ -125,6 +131,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 <div class="code-container">
                   ${verificationCode}
                 </div>
+                <p>If you lost the page, you can return to the verification page by clicking the link below:</p>
+                <p><a href="${returnLink}" class="link">Verify Account</a></p>
                 <p><i>If you didn't initiate this action, please disregard this email or contact our support team at <a href="mailto:support@ephemr.net" class="link">support@ephemr.net</a>.</i></p>
               </div>
             </div>
