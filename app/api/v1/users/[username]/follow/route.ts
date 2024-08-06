@@ -81,8 +81,7 @@ export async function POST(
 			},
 		})
 
-		const socketIo =
-			sockets && io(process.env.SOCKET_URL || "http://localhost:3000")
+		const socketIo = sockets && io(process.env.SOCKET_URL as string)
 
 		socketIo.emit("new-follow", {
 			user: {

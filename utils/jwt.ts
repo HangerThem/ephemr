@@ -19,7 +19,7 @@ export const generateToken = ({
 	expiresIn?: string
 }) => {
 	if (!JWT_SECRET) {
-	throw new Error("JWT_SECRET is not set")
+		throw new Error("JWT_SECRET is not set")
 	}
 	return jwt.sign(payload, JWT_SECRET, { expiresIn: expiresIn || "" })
 }
@@ -33,14 +33,14 @@ export const generateToken = ({
  */
 export const verifyRefreshToken = (refreshToken: string) => {
 	if (!JWT_REFRESH_SECRET) {
-	throw new Error("JWT_REFRESH_SECRET is not set")
+		throw new Error("JWT_REFRESH_SECRET is not set")
 	}
 	try {
-	const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
-	return decoded as { id: string }
+		const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
+		return decoded as { id: string }
 	} catch (err) {
-	console.error(err)
-	throw new Error("Invalid refresh token")
+		console.error(err)
+		throw new Error("Invalid refresh token")
 	}
 }
 
@@ -54,14 +54,14 @@ export const verifyRefreshToken = (refreshToken: string) => {
 export const verifyToken = (token: string, customSecret?: string) => {
 	const secret = customSecret || JWT_SECRET
 	if (!secret) {
-	throw new Error("Secret is not set")
+		throw new Error("Secret is not set")
 	}
 	try {
-	const decoded = jwt.verify(token, secret)
-	return decoded as { id: string }
+		const decoded = jwt.verify(token, secret)
+		return decoded as { id: string }
 	} catch (err) {
-	console.error(err)
-	throw new Error("Invalid token")
+		console.error(err)
+		throw new Error("Invalid token")
 	}
 }
 
@@ -73,14 +73,14 @@ export const verifyToken = (token: string, customSecret?: string) => {
  */
 export const generateNewTokens = (id: string) => {
 	if (!JWT_SECRET) {
-	throw new Error("JWT_SECRET is not set")
+		throw new Error("JWT_SECRET is not set")
 	}
 	if (!JWT_REFRESH_SECRET) {
-	throw new Error("JWT_REFRESH_SECRET is not set")
+		throw new Error("JWT_REFRESH_SECRET is not set")
 	}
-	const token = jwt.sign({ id }, JWT_SECRET, { expiresIn: "15m" })
+	const token = jwt.sign({ id }, JWT_SECRET, { expiresIn: "15min" })
 	const newRefreshToken = jwt.sign({ id }, JWT_REFRESH_SECRET, {
-	expiresIn: "7d",
+		expiresIn: "7d",
 	})
 	return { token, newRefreshToken }
 }

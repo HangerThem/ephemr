@@ -213,8 +213,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 				(socket) => socket.user.id !== decoded.id
 			)
 
-			const socketIo =
-				sockets && io(process.env.SOCKET_URL || "http://localhost:3000")
+			const socketIo = sockets && io(process.env.SOCKET_URL as string)
 
 			socketIo.emit("mention", {
 				user: {
