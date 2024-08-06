@@ -6,7 +6,7 @@ import { compare, hash } from "bcryptjs"
  * @returns A promise that resolves to the hashed password.
  */
 export const hashPassword = async (password: string) => {
-  return await hash(password, 12)
+	return await hash(password, 12)
 }
 
 /**
@@ -16,8 +16,8 @@ export const hashPassword = async (password: string) => {
  * @returns A promise that resolves to a boolean indicating whether the password matches the hashed password.
  */
 export const verifyPassword = async (
-  password: string,
-  hashedPassword: string
+	password: string,
+	hashedPassword: string
 ) => {
-  return await compare(password, hashedPassword)
+	return await compare(password, hashedPassword)
 }

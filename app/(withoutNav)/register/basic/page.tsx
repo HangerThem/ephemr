@@ -6,16 +6,16 @@ import { useEffect } from "react"
 import Link from "next/link"
 
 export default function Page() {
-  const { setStep } = useRegisterContext()
+	const { setStep } = useRegisterContext()
 
-  useEffect(() => {
-    setStep(1)
-  }, [])
+	useEffect(() => {
+	setStep(1)
+	}, [])
 
-  return (
-    <>
-      <RegisterForm />
-      <Link href="/register/verify">Next</Link>
-    </>
-  )
+	return (
+	<>
+		<RegisterForm />
+		<Link href="/register/verify">Next</Link>
+	</>
+	)
 }

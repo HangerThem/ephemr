@@ -4,5 +4,5 @@
  * @returns True if the response is an error response, false otherwise.
  */
 export const isError = (response: any): response is IErrorResponse => {
-  return (response as IErrorResponse).error !== undefined
+	return (response as IErrorResponse).error !== undefined
 }

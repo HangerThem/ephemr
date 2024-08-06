@@ -1,15 +1,15 @@
 import { Metadata } from "next"
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Ephemr • Settings",
-  }
+	return {
+	title: "Ephemr • Settings",
+	}
 }
 
 export default function Layout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode
 }>) {
-  return children
+	return children
 }

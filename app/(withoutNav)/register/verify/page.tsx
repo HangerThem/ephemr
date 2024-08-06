@@ -10,48 +10,48 @@ import VerifyForm from "@/components/forms/VerifyForm"
 import Link from "next/link"
 
 export default function Page() {
-  const { setStep } = useRegisterContext()
-  const router = useRouter()
-  const [usernameOrEmail, setUsernameOrEmail] = useState(
-    useSearchParams().get("email")
-  )
-  const [code, setCode] = useState(useSearchParams().get("code"))
+	const { setStep } = useRegisterContext()
+	const router = useRouter()
+	const [usernameOrEmail, setUsernameOrEmail] = useState(
+	useSearchParams().get("email")
+	)
+	const [code, setCode] = useState(useSearchParams().get("code"))
 
-  useEffect(() => {
-    setStep(2)
+	useEffect(() => {
+	setStep(2)
 
-    if (!usernameOrEmail) {
-      setUsernameOrEmail(localStorage.getItem("ephemrUsernameOrEmail") || "")
-    }
-  }, [])
+	if (!usernameOrEmail) {
+		setUsernameOrEmail(localStorage.getItem("ephemrUsernameOrEmail") || "")
+	}
+	}, [])
 
-  useEffect(() => {
-    const emailCheck = async () => {
-      if (!usernameOrEmail) {
-        router.push("/register/basic")
-      } else if (!usernameOrEmail.includes("@")) {
-        const res = await requestEmail(usernameOrEmail)
+	useEffect(() => {
+	const emailCheck = async () => {
+		if (!usernameOrEmail) {
+		router.push("/register/basic")
+		} else if (!usernameOrEmail.includes("@")) {
+		const res = await requestEmail(usernameOrEmail)
 
-        if (isError(res)) {
-          router.push("/register/basic")
-          return
-        }
+		if (isError(res)) {
+			router.push("/register/basic")
+			return
+		}
 
-        setUsernameOrEmail(res.email)
-      }
-    }
+		setUsernameOrEmail(res.email)
+		}
+	}
 
-    emailCheck()
-  }, [usernameOrEmail])
+	emailCheck()
+	}, [usernameOrEmail])
 
-  if (!usernameOrEmail || !usernameOrEmail.includes("@")) {
-    return null
-  }
+	if (!usernameOrEmail || !usernameOrEmail.includes("@")) {
+	return null
+	}
 
-  return (
-    <>
-      <VerifyForm email={usernameOrEmail as string} code={code as string} />
-      <Link href="/register/details">Next</Link>
-    </>
-  )
+	return (
+	<>
+		<VerifyForm email={usernameOrEmail as string} code={code as string} />
+		<Link href="/register/details">Next</Link>
+	</>
+	)
 }

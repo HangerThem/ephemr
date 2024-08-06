@@ -7,30 +7,30 @@ import LoginForm from "@/components/forms/loginForm"
 import RegisterForm from "@/components/forms/registerForm"
 
 const AuthModal = () => {
-  const { modalOpen, toggleModal } = useAuth()
-  const modalRef = useRef<HTMLDialogElement>(null)
+	const { modalOpen, toggleModal } = useAuth()
+	const modalRef = useRef<HTMLDialogElement>(null)
 
-  useEffect(() => {
-    if (modalOpen) {
-      modalRef.current?.showModal()
-    } else {
-      modalRef.current?.close()
-    }
-  }, [modalOpen])
+	useEffect(() => {
+	if (modalOpen) {
+		modalRef.current?.showModal()
+	} else {
+		modalRef.current?.close()
+	}
+	}, [modalOpen])
 
-  if (typeof window !== "undefined") {
-    window.onclick = (e) => {
-      if (e.target === modalRef.current) {
-        toggleModal()
-      }
-    }
-  }
+	if (typeof window !== "undefined") {
+	window.onclick = (e) => {
+		if (e.target === modalRef.current) {
+		toggleModal()
+		}
+	}
+	}
 
-  return (
-    <ModalContainer ref={modalRef}>
-      <LoginForm />
-    </ModalContainer>
-  )
+	return (
+	<ModalContainer ref={modalRef}>
+		<LoginForm />
+	</ModalContainer>
+	)
 }
 
 export default AuthModal

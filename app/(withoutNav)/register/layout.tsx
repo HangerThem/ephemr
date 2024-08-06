@@ -2,14 +2,14 @@ import { RegisterProvider } from "@/context/registerContext"
 import StepIndicator from "@/components/stepIndicator"
 
 export default function RegisterLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode
 }) {
-  return (
-    <RegisterProvider>
-      <StepIndicator />
-      {children}
-    </RegisterProvider>
-  )
+	return (
+	<RegisterProvider>
+		<StepIndicator />
+		{children}
+	</RegisterProvider>
+	)
 }

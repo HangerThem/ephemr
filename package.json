@@ -2,15 +2,13 @@
   "name": "ephemr",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
-  "main": "server/server.ts",
   "prisma": {
-    "seed": "ts-node-esm prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "scripts": {
-    "dev": "nodemon --esm --transpile-only",
+    "dev": "next dev",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production nodemon --esm",
+    "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate && prisma db push --accept-data-loss"
   },
@@ -31,7 +29,8 @@
     "react-dom": "^18",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "uninstall": "^0.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

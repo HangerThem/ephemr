@@ -10,34 +10,34 @@ import UserProfilePosts from "./userProfilePosts"
 import ProfileActions from "./profileActions"
 
 export default function CurrentUserProfile() {
-  const { user, loading } = useAuth()
-  const [posts, setPosts] = useState<IPostSimple[]>([])
+	const { user, loading } = useAuth()
+	const [posts, setPosts] = useState<IPostSimple[]>([])
 
-  useEffect(() => {
-    if (!user) return
+	useEffect(() => {
+	if (!user) return
 
-    const populateData = async () => {
-      const postsResponse = await requestUserPosts(user.username)
+	const populateData = async () => {
+		const postsResponse = await requestUserPosts(user.username)
 
-      if (isError(postsResponse)) {
-        return
-      }
+		if (isError(postsResponse)) {
+		return
+		}
 
-      setPosts(postsResponse.posts)
-    }
+		setPosts(postsResponse.posts)
+	}
 
-    populateData()
-  }, [user])
+	populateData()
+	}, [user])
 
-  if (!user || loading) {
-    return <PageLoader />
-  }
+	if (!user || loading) {
+	return <PageLoader />
+	}
 
-  return (
-    <>
-      <ProfileHeader user={user} />
-      <ProfileActions currentUser userData={user} />
-      <UserProfilePosts posts={posts} />
-    </>
-  )
+	return (
+	<>
+		<ProfileHeader user={user} />
+		<ProfileActions currentUser userData={user} />
+		<UserProfilePosts posts={posts} />
+	</>
+	)
 }

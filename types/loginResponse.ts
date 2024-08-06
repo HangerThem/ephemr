@@ -1,5 +1,5 @@
 type LoginResponse = {
-  userNotFound: boolean
-  invalidUsernameOrEmail: boolean
-  incorrectPassword: boolean
+	userNotFound: boolean
+	invalidUsernameOrEmail: boolean
+	incorrectPassword: boolean
 }

@@ -1,31 +1,31 @@
 import { get } from "../requestHelpers"
 
 export const requestSearchPosts = async (
-  query: string
+	query: string
 ): Promise<
-  | {
-      status: number
-      posts: IPostSimple[]
-    }
-  | IErrorResponse
+	| {
+		status: number
+		posts: IPostSimple[]
+	}
+	| IErrorResponse
 > => {
-  return await get<{
-    status: number
-    posts: IPostSimple[]
-  }>(`/search/posts?q=${query}`)
+	return await get<{
+	status: number
+	posts: IPostSimple[]
+	}>(`/search/posts?q=${query}`)
 }
 
 export const requestSearchUsers = async (
-  query: string
+	query: string
 ): Promise<
-  | {
-      status: number
-      users: IUserSimple[]
-    }
-  | IErrorResponse
+	| {
+		status: number
+		users: IUserSimple[]
+	}
+	| IErrorResponse
 > => {
-  return await get<{
-    status: number
-    users: IUserSimple[]
-  }>(`/search/users?q=${query}`)
+	return await get<{
+	status: number
+	users: IUserSimple[]
+	}>(`/search/users?q=${query}`)
 }

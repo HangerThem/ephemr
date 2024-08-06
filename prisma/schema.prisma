@@ -1,170 +1,170 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+	provider = "mysql"
+	url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+	provider = "prisma-client-js"
 }
 
 model User {
-  id               String           @id @default(cuid())
-  email            String           @unique
-  username         String           @unique
-  displayName      String
-  password         String
-  online           Boolean          @default(false)
-  lastSeen         DateTime?
-  private          Boolean          @default(false)
-  verified         Boolean          @default(false)
-  verificationCode Int?
-  resetToken       String?          @unique
-  resetTokenExpiry DateTime?
-  profilePic       String?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  posts            Post[]
-  postLikes        PostLike[]
-  commentLikes     CommentLike[]
-  comments         Comment[]
-  conversations    Conversation[]   @relation("UserToConversation")
-  sentMessages     Message[]
-  mood             Mood?            @relation(fields: [moodId], references: [id])
-  moodId           String?
-  following        Follow[]         @relation("Follower")
-  followers        Follow[]         @relation("Followee")
-  settings         Settings?        @relation("UserToSettings")
-  userSession      UserSession[]
-  userInformation  UserInformation? @relation("UserToUserInformation")
+	id               String           @id @default(cuid())
+	email            String           @unique
+	username         String           @unique
+	displayName      String
+	password         String
+	online           Boolean          @default(false)
+	lastSeen         DateTime?
+	private          Boolean          @default(false)
+	verified         Boolean          @default(false)
+	verificationCode Int?
+	resetToken       String?          @unique
+	resetTokenExpiry DateTime?
+	profilePic       String?
+	createdAt        DateTime         @default(now())
+	updatedAt        DateTime         @updatedAt
+	posts            Post[]
+	postLikes        PostLike[]
+	commentLikes     CommentLike[]
+	comments         Comment[]
+	conversations    Conversation[]   @relation("UserToConversation")
+	sentMessages     Message[]
+	mood             Mood?            @relation(fields: [moodId], references: [id])
+	moodId           String?
+	following        Follow[]         @relation("Follower")
+	followers        Follow[]         @relation("Followee")
+	settings         Settings?        @relation("UserToSettings")
+	userSession      UserSession[]
+	userInformation  UserInformation? @relation("UserToUserInformation")
 }
 
 model Follow {
-  id         String   @id @default(cuid())
-  follower   User     @relation("Follower", fields: [followerId], references: [id])
-  followerId String
-  followee   User     @relation("Followee", fields: [followeeId], references: [id])
-  followeeId String
-  createdAt  DateTime @default(now())
+	id         String   @id @default(cuid())
+	follower   User     @relation("Follower", fields: [followerId], references: [id])
+	followerId String
+	followee   User     @relation("Followee", fields: [followeeId], references: [id])
+	followeeId String
+	createdAt  DateTime @default(now())
 
-  @@unique([followerId, followeeId])
+	@@unique([followerId, followeeId])
 }
 
 model PostLike {
-  id        String   @id @default(cuid())
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
+	id        String   @id @default(cuid())
+	post      Post     @relation(fields: [postId], references: [id])
+	postId    String
+	user      User     @relation(fields: [userId], references: [id])
+	userId    String
+	createdAt DateTime @default(now())
 
-  @@unique([postId, userId])
+	@@unique([postId, userId])
 }
 
 model CommentLike {
-  id        String   @id @default(cuid())
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  commentId String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime @default(now())
+	id        String   @id @default(cuid())
+	comment   Comment  @relation(fields: [commentId], references: [id])
+	commentId String
+	user      User     @relation(fields: [userId], references: [id])
+	userId    String
+	createdAt DateTime @default(now())
 
-  @@unique([commentId, userId])
+	@@unique([commentId, userId])
 }
 
 model Post {
-  id        String     @id @default(cuid())
-  content   String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    String?
-  comments  Comment[]
-  postLike  PostLike[]
-  mood      Mood?      @relation(fields: [moodId], references: [id])
-  moodId    String?
+	id        String     @id @default(cuid())
+	content   String
+	createdAt DateTime   @default(now())
+	updatedAt DateTime   @updatedAt
+	user      User?      @relation(fields: [userId], references: [id])
+	userId    String?
+	comments  Comment[]
+	postLike  PostLike[]
+	mood      Mood?      @relation(fields: [moodId], references: [id])
+	moodId    String?
 }
 
 model Comment {
-  id        String   @id @default(cuid())
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+	id        String   @id @default(cuid())
+	content   String
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+	post      Post     @relation(fields: [postId], references: [id])
+	postId    String
+	user      User?    @relation(fields: [userId], references: [id])
+	userId    String?
 
-  parentId String?   @map("parent_id")
-  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
-  replies  Comment[] @relation("CommentToComment")
+	parentId String?   @map("parent_id")
+	parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+	replies  Comment[] @relation("CommentToComment")
 
-  commentLike CommentLike[]
+	commentLike CommentLike[]
 
-  @@index([postId], name: "idx_comment_postId")
-  @@index([userId], name: "idx_comment_userId")
-  @@index([parentId], name: "idx_comment_parentId")
+	@@index([postId], name: "idx_comment_postId")
+	@@index([userId], name: "idx_comment_userId")
+	@@index([parentId], name: "idx_comment_parentId")
 }
 
 model Conversation {
-  id           String    @id @default(cuid())
-  participants User[]    @relation("UserToConversation")
-  messages     Message[]
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+	id           String    @id @default(cuid())
+	participants User[]    @relation("UserToConversation")
+	messages     Message[]
+	createdAt    DateTime  @default(now())
+	updatedAt    DateTime  @updatedAt
 }
 
 model Message {
-  id             String       @id @default(cuid())
-  content        String
-  senderId       String
-  sender         User         @relation(fields: [senderId], references: [id])
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+	id             String       @id @default(cuid())
+	content        String
+	senderId       String
+	sender         User         @relation(fields: [senderId], references: [id])
+	conversationId String
+	conversation   Conversation @relation(fields: [conversationId], references: [id])
+	createdAt      DateTime     @default(now())
+	updatedAt      DateTime     @updatedAt
 }
 
 model Mood {
-  id    String @id @default(cuid())
-  name  String @unique
-  emoji String
-  color String
-  users User[] @relation
-  posts Post[] @relation
+	id    String @id @default(cuid())
+	name  String @unique
+	emoji String
+	color String
+	users User[] @relation
+	posts Post[] @relation
 }
 
 model Settings {
-  id                 String   @id @default(cuid())
-  user               User     @relation("UserToSettings", fields: [userId], references: [id])
-  userId             String   @unique
-  theme              String   @default("dark")
-  language           String   @default("en")
-  notifications      Boolean  @default(true)
-  emailNotifications Boolean  @default(false)
-  activityStatus     Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+	id                 String   @id @default(cuid())
+	user               User     @relation("UserToSettings", fields: [userId], references: [id])
+	userId             String   @unique
+	theme              String   @default("dark")
+	language           String   @default("en")
+	notifications      Boolean  @default(true)
+	emailNotifications Boolean  @default(false)
+	activityStatus     Boolean  @default(false)
+	createdAt          DateTime @default(now())
+	updatedAt          DateTime @updatedAt
 }
 
 model UserSession {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  socketId  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+	id        String   @id @default(cuid())
+	userId    String
+	user      User     @relation(fields: [userId], references: [id])
+	socketId  String   @unique
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
 
-  @@index([userId], name: "idx_user_session_userId")
+	@@index([userId], name: "idx_user_session_userId")
 }
 
 model UserInformation {
-  id        String   @id @default(cuid())
-  user      User     @relation("UserToUserInformation", fields: [userId], references: [id])
-  userId    String   @unique
-  pronouns  String?
-  bio       String?
-  location  String?
-  website   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+	id        String   @id @default(cuid())
+	user      User     @relation("UserToUserInformation", fields: [userId], references: [id])
+	userId    String   @unique
+	pronouns  String?
+	bio       String?
+	location  String?
+	website   String?
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
 }

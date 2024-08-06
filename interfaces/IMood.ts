@@ -1,5 +1,5 @@
 interface IMood {
-  name: string
-  emoji: string
-  color: string
+	name: string
+	emoji: string
+	color: string
 }

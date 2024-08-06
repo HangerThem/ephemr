@@ -1,85 +1,85 @@
 import { get, post } from "../requestHelpers"
 
 export const requestLogin = async (
-  user: ILoginUser
+	user: ILoginUser
 ): Promise<
-  | {
-      status: number
-      token: string
-      refreshToken: string
-    }
-  | IErrorResponse
+	| {
+		status: number
+		token: string
+		refreshToken: string
+	}
+	| IErrorResponse
 > => {
-  return await post<
-    | {
-        status: number
-        token: string
-        refreshToken: string
-      }
-    | IErrorResponse
-  >("/auth/login", {
-    ...user,
-  })
+	return await post<
+	| {
+		status: number
+		token: string
+		refreshToken: string
+		}
+	| IErrorResponse
+	>("/auth/login", {
+	...user,
+	})
 }
 
 export const requestRegister = async (
-  user: IRegisterUser
+	user: IRegisterUser
 ): Promise<
-  | {
-      status: number
-      token: string
-      refreshToken: string
-    }
-  | IErrorResponse
+	| {
+		status: number
+		token: string
+		refreshToken: string
+	}
+	| IErrorResponse
 > => {
-  return await post<
-    | {
-        status: number
-        token: string
-        refreshToken: string
-      }
-    | IErrorResponse
-  >("/auth/register", {
-    ...user,
-  })
+	return await post<
+	| {
+		status: number
+		token: string
+		refreshToken: string
+		}
+	| IErrorResponse
+	>("/auth/register", {
+	...user,
+	})
 }
 
 export const requestVerify = async (
-  usernameOrEmail: string,
-  code: string
+	usernameOrEmail: string,
+	code: string
 ): Promise<
-  | {
-      status: number
-      message: string
-    }
-  | IErrorResponse
+	| {
+		status: number
+		message: string
+	}
+	| IErrorResponse
 > => {
-  return await post<
-    | {
-        status: number
-        message: string
-      }
-    | IErrorResponse
-  >("/auth/verify", {
-    usernameOrEmail,
-    code,
-  })
+	return await post<
+	| {
+		status: number
+		message: string
+		}
+	| IErrorResponse
+	>("/auth/verify", {
+	usernameOrEmail,
+	code,
+	})
 }
 
 export const requestEmail = async (
-  username: string
+	username: string
 ): Promise<
-  | {
-      status: number
-      email: string
-    }
-  | IErrorResponse
+	| {
+		status: number
+		email: string
+	}
+	| IErrorResponse
 > => {
-  return await get<
-    | {
-        status: number
-        email: string
-      }
-    | IErrorResponse
-  >(`/auth/email?username=${username}`)
+	return await get<
+	| {
+		status: number
+		email: string
+		}
+	| IErrorResponse
+	>(`/auth/email?username=${username}`)
 }

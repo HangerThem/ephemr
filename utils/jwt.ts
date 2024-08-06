@@ -12,16 +12,16 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET
  * @throws Error if JWT_SECRET is not set.
  */
 export const generateToken = ({
-  payload,
-  expiresIn,
+	payload,
+	expiresIn,
 }: {
-  payload: any
-  expiresIn?: string
+	payload: any
+	expiresIn?: string
 }) => {
-  if (!JWT_SECRET) {
-    throw new Error("JWT_SECRET is not set")
-  }
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: expiresIn || "" })
+	if (!JWT_SECRET) {
+	throw new Error("JWT_SECRET is not set")
+	}
+	return jwt.sign(payload, JWT_SECRET, { expiresIn: expiresIn || "" })
 }
 
 /**
@@ -32,16 +32,16 @@ export const generateToken = ({
  * @throws Error if JWT_REFRESH_SECRET is not set or if the refresh token is invalid.
  */
 export const verifyRefreshToken = (refreshToken: string) => {
-  if (!JWT_REFRESH_SECRET) {
-    throw new Error("JWT_REFRESH_SECRET is not set")
-  }
-  try {
-    const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
-    return decoded as { id: string }
-  } catch (err) {
-    console.error(err)
-    throw new Error("Invalid refresh token")
-  }
+	if (!JWT_REFRESH_SECRET) {
+	throw new Error("JWT_REFRESH_SECRET is not set")
+	}
+	try {
+	const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET)
+	return decoded as { id: string }
+	} catch (err) {
+	console.error(err)
+	throw new Error("Invalid refresh token")
+	}
 }
 
 /**
@@ -52,17 +52,17 @@ export const verifyRefreshToken = (refreshToken: string) => {
  * @throws An error if the secret is not set or if the token is invalid.
  */
 export const verifyToken = (token: string, customSecret?: string) => {
-  const secret = customSecret || JWT_SECRET
-  if (!secret) {
-    throw new Error("Secret is not set")
-  }
-  try {
-    const decoded = jwt.verify(token, secret)
-    return decoded as { id: string }
-  } catch (err) {
-    console.error(err)
-    throw new Error("Invalid token")
-  }
+	const secret = customSecret || JWT_SECRET
+	if (!secret) {
+	throw new Error("Secret is not set")
+	}
+	try {
+	const decoded = jwt.verify(token, secret)
+	return decoded as { id: string }
+	} catch (err) {
+	console.error(err)
+	throw new Error("Invalid token")
+	}
 }
 
 /**
@@ -72,15 +72,15 @@ export const verifyToken = (token: string, customSecret?: string) => {
  * @throws Error if JWT_SECRET or JWT_REFRESH_SECRET is not set.
  */
 export const generateNewTokens = (id: string) => {
-  if (!JWT_SECRET) {
-    throw new Error("JWT_SECRET is not set")
-  }
-  if (!JWT_REFRESH_SECRET) {
-    throw new Error("JWT_REFRESH_SECRET is not set")
-  }
-  const token = jwt.sign({ id }, JWT_SECRET, { expiresIn: "15m" })
-  const newRefreshToken = jwt.sign({ id }, JWT_REFRESH_SECRET, {
-    expiresIn: "7d",
-  })
-  return { token, newRefreshToken }
+	if (!JWT_SECRET) {
+	throw new Error("JWT_SECRET is not set")
+	}
+	if (!JWT_REFRESH_SECRET) {
+	throw new Error("JWT_REFRESH_SECRET is not set")
+	}
+	const token = jwt.sign({ id }, JWT_SECRET, { expiresIn: "15m" })
+	const newRefreshToken = jwt.sign({ id }, JWT_REFRESH_SECRET, {
+	expiresIn: "7d",
+	})
+	return { token, newRefreshToken }
 }

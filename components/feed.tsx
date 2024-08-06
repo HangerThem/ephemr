@@ -5,28 +5,28 @@ import { isError } from "@/utils/isError"
 import { useAuth } from "@/context/authContext"
 
 export default function Feed() {
-  const { user } = useAuth()
-  const [posts, setPosts] = useState<IPostSimple[]>([])
+	const { user } = useAuth()
+	const [posts, setPosts] = useState<IPostSimple[]>([])
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await requestGetPosts()
+	useEffect(() => {
+	const fetchPosts = async () => {
+		const response = await requestGetPosts()
 
-      if (isError(response)) {
-        return
-      }
+		if (isError(response)) {
+		return
+		}
 
-      setPosts(response.posts)
-    }
+		setPosts(response.posts)
+	}
 
-    fetchPosts()
-  }, [user])
+	fetchPosts()
+	}, [user])
 
-  return (
-    <>
-      {posts.map((post) => (
-        <PostCard key={post.id} postData={post} />
-      ))}
-    </>
-  )
+	return (
+	<>
+		{posts.map((post) => (
+		<PostCard key={post.id} postData={post} />
+		))}
+	</>
+	)
 }

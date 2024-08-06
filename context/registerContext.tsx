@@ -3,37 +3,37 @@
 import { createContext, useContext, useState } from "react"
 
 interface RegisterContextProps {
-  step: number
-  setStep: (step: number) => void
+	step: number
+	setStep: (step: number) => void
 }
 
 export const RegisterContext = createContext<RegisterContextProps | undefined>(
-  undefined
+	undefined
 )
 
 export const RegisterProvider = ({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode
 }) => {
-  const [step, setStep] = useState(1)
+	const [step, setStep] = useState(1)
 
-  return (
-    <RegisterContext.Provider
-      value={{
-        step,
-        setStep,
-      }}
-    >
-      {children}
-    </RegisterContext.Provider>
-  )
+	return (
+	<RegisterContext.Provider
+		value={{
+		step,
+		setStep,
+		}}
+	>
+		{children}
+	</RegisterContext.Provider>
+	)
 }
 
 export const useRegisterContext = () => {
-  const context = useContext(RegisterContext)
-  if (context === undefined) {
-    throw new Error("useRegisterContext must be used within a SocketProvider")
-  }
-  return context
+	const context = useContext(RegisterContext)
+	if (context === undefined) {
+	throw new Error("useRegisterContext must be used within a SocketProvider")
+	}
+	return context
 }

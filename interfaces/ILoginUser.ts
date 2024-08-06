@@ -1,4 +1,4 @@
 interface ILoginUser {
-  usernameOrEmail: string
-  password: string
+	usernameOrEmail: string
+	password: string
 }
