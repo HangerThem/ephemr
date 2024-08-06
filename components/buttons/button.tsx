@@ -21,36 +21,36 @@ const ButtonWrapper = styled.button`
 	border: 1px solid rgba(var(--light), 0.2);
 
 	&.danger {
-	background-color: rgba(var(--danger), 0.6);
+		background-color: rgba(var(--danger), 0.6);
 
-	&:hover {
-		background-color: rgba(var(--danger), 0.8);
-	}
+		&:hover {
+			background-color: rgba(var(--danger), 0.8);
+		}
 	}
 
 	&.small {
-	width: 75px;
+		width: 75px;
 	}
 
 	&.medium {
-	width: 100px;
+		width: 100px;
 	}
 
 	&.large {
-	width: 150px;
+		width: 150px;
 	}
 
 	&.full {
-	width: 100%;
+		width: 100%;
 	}
 
 	&:hover {
-	background-color: rgba(var(--light), 0.2);
+		background-color: rgba(var(--light), 0.2);
 	}
 
 	&:disabled {
-	cursor: default;
-	background-color: rgba(var(--light), 0.1);
+		cursor: default;
+		background-color: rgba(var(--light), 0.1);
 	}
 `
 
@@ -76,33 +76,33 @@ export default function Button({
 	onClick,
 }: ButtonProps) {
 	if (link) {
+		return (
+			<Link href={link}>
+				<ButtonWrapper
+					className={className + " " + size}
+					type={type}
+					onClick={onClick}
+				>
+					{icon} {children}
+				</ButtonWrapper>
+			</Link>
+		)
+	}
+
 	return (
-		<Link href={link}>
 		<ButtonWrapper
 			className={className + " " + size}
 			type={type}
 			onClick={onClick}
+			disabled={loading}
 		>
-			{icon} {children}
+			{loading ? (
+				<DotLoader />
+			) : (
+				<>
+					{icon} {children}
+				</>
+			)}
 		</ButtonWrapper>
-		</Link>
-	)
-	}
-
-	return (
-	<ButtonWrapper
-		className={className + " " + size}
-		type={type}
-		onClick={onClick}
-		disabled={loading}
-	>
-		{loading ? (
-		<DotLoader />
-		) : (
-		<>
-			{icon} {children}
-		</>
-		)}
-	</ButtonWrapper>
 	)
 }

@@ -26,11 +26,11 @@ const Spacer = styled.div`
 const Header = () => {
 	const { user } = useAuth()
 	return (
-	<HeaderContainer>
-		{user && <ProfileTab />}
-		<SearchBar />
-		{user && <Spacer />}
-	</HeaderContainer>
+		<HeaderContainer>
+			{user && <ProfileTab />}
+			<SearchBar />
+			{user && <Spacer />}
+		</HeaderContainer>
 	)
 }
 

@@ -15,108 +15,108 @@ export async function GET(
 	{ params }: { params: { postId: string } }
 ) {
 	try {
-	const authHeader = req.headers.get("Authorization")
-	const token =
-		authHeader && authHeader.startsWith("Bearer ")
-		? authHeader.split(" ")[1]
-		: null
+		const authHeader = req.headers.get("Authorization")
+		const token =
+			authHeader && authHeader.startsWith("Bearer ")
+				? authHeader.split(" ")[1]
+				: null
 
-	let decoded
+		let decoded
 
-	try {
-		decoded = token && verifyToken(token)
-	} catch (e) {
-		console.error("Error verifying token: ", e)
-	}
+		try {
+			decoded = token && verifyToken(token)
+		} catch (e) {
+			console.error("Error verifying token: ", e)
+		}
 
-	const { postId } = params
+		const { postId } = params
 
-	const post = await prisma.post.findFirst({
-		where: {
-		id: postId,
-		},
-		select: {
-		id: true,
-		content: true,
-		createdAt: true,
-		updatedAt: true,
-		user: {
+		const post = await prisma.post.findFirst({
+			where: {
+				id: postId,
+			},
 			select: {
-			id: true,
-			username: true,
-			displayName: true,
-			lastSeen: true,
-			online: true,
-			profilePic: true,
-			settings: {
-				select: {
-				activityStatus: true,
+				id: true,
+				content: true,
+				createdAt: true,
+				updatedAt: true,
+				user: {
+					select: {
+						id: true,
+						username: true,
+						displayName: true,
+						lastSeen: true,
+						online: true,
+						profilePic: true,
+						settings: {
+							select: {
+								activityStatus: true,
+							},
+						},
+						mood: {
+							select: {
+								emoji: true,
+								name: true,
+							},
+						},
+					},
+				},
+				mood: {
+					select: {
+						emoji: true,
+						name: true,
+					},
+				},
+				_count: {
+					select: {
+						comments: true,
+						postLike: true,
+					},
 				},
 			},
-			mood: {
-				select: {
-				emoji: true,
-				name: true,
-				},
-			},
-			},
-		},
-		mood: {
-			select: {
-			emoji: true,
-			name: true,
-			},
-		},
-		_count: {
-			select: {
-			comments: true,
-			postLike: true,
-			},
-		},
-		},
-	})
-
-	if (!post) {
-		return notFoundResponse("Post not found")
-	}
-
-	const activityStatus = post.user?.settings?.activityStatus
-	const user = {
-		id: post.user?.id,
-		username: post.user?.username,
-		displayName: post.user?.displayName,
-		profilePic: post.user?.profilePic,
-		lastSeen: activityStatus ? post.user?.lastSeen : null,
-		online: activityStatus ? post.user?.online : false,
-		mood: post.user?.mood,
-	}
-
-	const responseTemp = {
-		...post,
-		user,
-	}
-
-	let response = { ...responseTemp, isLiked: false }
-
-	if (decoded) {
-		const like = await prisma.postLike.findUnique({
-		where: {
-			postId_userId: {
-			postId: postId,
-			userId: decoded.id,
-			},
-		},
 		})
 
-		if (like) {
-		response.isLiked = true
+		if (!post) {
+			return notFoundResponse("Post not found")
 		}
-	}
 
-	return successResponse({ post: response })
+		const activityStatus = post.user?.settings?.activityStatus
+		const user = {
+			id: post.user?.id,
+			username: post.user?.username,
+			displayName: post.user?.displayName,
+			profilePic: post.user?.profilePic,
+			lastSeen: activityStatus ? post.user?.lastSeen : null,
+			online: activityStatus ? post.user?.online : false,
+			mood: post.user?.mood,
+		}
+
+		const responseTemp = {
+			...post,
+			user,
+		}
+
+		let response = { ...responseTemp, isLiked: false }
+
+		if (decoded) {
+			const like = await prisma.postLike.findUnique({
+				where: {
+					postId_userId: {
+						postId: postId,
+						userId: decoded.id,
+					},
+				},
+			})
+
+			if (like) {
+				response.isLiked = true
+			}
+		}
+
+		return successResponse({ post: response })
 	} catch (e) {
-	console.error("Error getting post: ", e)
-	return internalServerErrorResponse()
+		console.error("Error getting post: ", e)
+		return internalServerErrorResponse()
 	}
 }
 
@@ -125,72 +125,72 @@ export async function PATCH(
 	{ params }: { params: { postId: string } }
 ) {
 	try {
-	const authHeader = req.headers.get("Authorization")
-	const token =
-		authHeader && authHeader.startsWith("Bearer ")
-		? authHeader.split(" ")[1]
-		: null
-	if (!token) {
-		return badRequestResponse("No token provided")
-	}
+		const authHeader = req.headers.get("Authorization")
+		const token =
+			authHeader && authHeader.startsWith("Bearer ")
+				? authHeader.split(" ")[1]
+				: null
+		if (!token) {
+			return badRequestResponse("No token provided")
+		}
 
-	const { postId } = params
-	let decoded
+		const { postId } = params
+		let decoded
 
-	try {
-		decoded = verifyToken(token)
-	} catch (e) {
-		console.error("Error verifying token: ", e)
-		return unauthorizedResponse("Invalid token")
-	}
+		try {
+			decoded = verifyToken(token)
+		} catch (e) {
+			console.error("Error verifying token: ", e)
+			return unauthorizedResponse("Invalid token")
+		}
 
-	const post = await prisma.post.findFirst({
-		where: {
-		id: postId,
-		userId: decoded.id,
-		},
-	})
-
-	if (!post) {
-		return notFoundResponse("Post not found")
-	}
-
-	const { content } = await req.json()
-
-	const updatedPost = await prisma.post.update({
-		where: {
-		id: postId,
-		},
-		data: {
-		content,
-		},
-		select: {
-		id: true,
-		content: true,
-		createdAt: true,
-		updatedAt: true,
-		user: {
-			select: {
-			id: true,
-			username: true,
-			displayName: true,
-			lastSeen: true,
-			online: true,
+		const post = await prisma.post.findFirst({
+			where: {
+				id: postId,
+				userId: decoded.id,
 			},
-		},
-		_count: {
-			select: {
-			comments: true,
-			postLike: true,
-			},
-		},
-		},
-	})
+		})
 
-	return successResponse({ post: updatedPost })
+		if (!post) {
+			return notFoundResponse("Post not found")
+		}
+
+		const { content } = await req.json()
+
+		const updatedPost = await prisma.post.update({
+			where: {
+				id: postId,
+			},
+			data: {
+				content,
+			},
+			select: {
+				id: true,
+				content: true,
+				createdAt: true,
+				updatedAt: true,
+				user: {
+					select: {
+						id: true,
+						username: true,
+						displayName: true,
+						lastSeen: true,
+						online: true,
+					},
+				},
+				_count: {
+					select: {
+						comments: true,
+						postLike: true,
+					},
+				},
+			},
+		})
+
+		return successResponse({ post: updatedPost })
 	} catch (e) {
-	console.error("Error updating post: ", e)
-	return internalServerErrorResponse()
+		console.error("Error updating post: ", e)
+		return internalServerErrorResponse()
 	}
 }
 
@@ -199,52 +199,52 @@ export async function DELETE(
 	{ params }: { params: { postId: string } }
 ) {
 	try {
-	const authHeader = req.headers.get("Authorization")
-	const token =
-		authHeader && authHeader.startsWith("Bearer ")
-		? authHeader.split(" ")[1]
-		: null
-	if (!token) {
-		return badRequestResponse("No token provided")
-	}
+		const authHeader = req.headers.get("Authorization")
+		const token =
+			authHeader && authHeader.startsWith("Bearer ")
+				? authHeader.split(" ")[1]
+				: null
+		if (!token) {
+			return badRequestResponse("No token provided")
+		}
 
-	const { postId } = params
-	let decoded
+		const { postId } = params
+		let decoded
 
-	try {
-		decoded = verifyToken(token)
+		try {
+			decoded = verifyToken(token)
+		} catch (e) {
+			console.error("Error verifying token: ", e)
+			return unauthorizedResponse("Invalid token")
+		}
+
+		const post = await prisma.post.findFirst({
+			where: {
+				id: postId,
+				userId: decoded.id,
+			},
+		})
+
+		if (!post) {
+			return notFoundResponse("Post not found")
+		}
+
+		await prisma.post.delete({
+			where: {
+				id: postId,
+			},
+		})
+
+		return successResponse({ message: "Post deleted" })
 	} catch (e) {
-		console.error("Error verifying token: ", e)
-		return unauthorizedResponse("Invalid token")
-	}
-
-	const post = await prisma.post.findFirst({
-		where: {
-		id: postId,
-		userId: decoded.id,
-		},
-	})
-
-	if (!post) {
-		return notFoundResponse("Post not found")
-	}
-
-	await prisma.post.delete({
-		where: {
-		id: postId,
-		},
-	})
-
-	return successResponse({ message: "Post deleted" })
-	} catch (e) {
-	console.error("Error deleting post: ", e)
-	return internalServerErrorResponse()
+		console.error("Error deleting post: ", e)
+		return internalServerErrorResponse()
 	}
 }
 
 export async function OPTIONS() {
 	return optionsResponse({
-	"Access-Control-Allow-Origin": "*",
-	"Access-Control-Allow-Methods": "GET, PATCH, DELETE",
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "GET, PATCH, DELETE",
 	})
 }

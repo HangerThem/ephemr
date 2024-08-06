@@ -68,7 +68,7 @@ const SidebarButton = styled.div`
 	cursor: pointer;
 
 	&:hover {
-	color: rgb(var(--light));
+		color: rgb(var(--light));
 	}
 `
 
@@ -84,11 +84,11 @@ const SidebarLink = styled(Link)`
 	position: relative;
 
 	&.active {
-	color: rgb(var(--light));
+		color: rgb(var(--light));
 	}
 
 	&:hover {
-	color: rgb(var(--light));
+		color: rgb(var(--light));
 	}
 `
 
@@ -112,89 +112,89 @@ const Sidebar = () => {
 	const pathname = usePathname()
 
 	const isActive = (path: string) => {
-	return pathname === path || pathname === `${path}/[id]`
+		return pathname === path || pathname === `${path}/[id]`
 	}
 
 	const formatNotificationCount = (count: number) => {
-	if (count > 9) {
-		return "9+"
-	}
+		if (count > 9) {
+			return "9+"
+		}
 
-	return count
+		return count
 	}
 
 	return (
-	<SidebarContainer>
-		<SidebarTitle href="/" passHref>
-		Ephemr
-		<Image src="/images/logo.svg" alt="Ephemr" width={40} height={40} />
-		</SidebarTitle>
-		<SidebarLinks>
-		<SidebarLink
-			href="/"
-			passHref
-			className={isActive("/") ? "active" : ""}
-		>
-			{isActive("/") ? <HouseDoorFill /> : <HouseDoor />}
-			Home
-		</SidebarLink>
-		{user ? (
-			<>
-			<SidebarLink
-				href="/post/new"
-				passHref
-				className={isActive("/post/new") ? "active" : ""}
-			>
-				{isActive("/post/new") ? <PenFill /> : <Pen />}
-				New post
-			</SidebarLink>
-			<SidebarLink
-				href="/messages"
-				passHref
-				className={isActive("/messages") ? "active" : ""}
-			>
-				<NotificationBadge>
-				{formatNotificationCount(11)}
-				</NotificationBadge>
-				{isActive("/messages") ? <ChatLeftTextFill /> : <ChatLeftText />}
-				Messages
-			</SidebarLink>
-			<SidebarLink
-				href="/notifications"
-				passHref
-				className={isActive("/notifications") ? "active" : ""}
-			>
-				<NotificationBadge>
-				{formatNotificationCount(1)}
-				</NotificationBadge>
-				{isActive("/notifications") ? <BellFill /> : <Bell />}
-				Notifications
-			</SidebarLink>
-			<SidebarLink
-				href="/settings"
-				passHref
-				className={isActive("/settings") ? "active" : ""}
-			>
-				{isActive("/settings") ? <GearWideConnected /> : <GearWide />}
-				Settings
-			</SidebarLink>
-			</>
-		) : null}
-		</SidebarLinks>
-		<SidebarActions>
-		{user ? (
-			<SidebarButton onClick={logout}>
-			<DoorClosed />
-			Logout
-			</SidebarButton>
-		) : (
-			<SidebarButton onClick={toggleModal}>
-			<DoorOpen />
-			Login
-			</SidebarButton>
-		)}
-		</SidebarActions>
-	</SidebarContainer>
+		<SidebarContainer>
+			<SidebarTitle href="/" passHref>
+				Ephemr
+				<Image src="/images/logo.svg" alt="Ephemr" width={40} height={40} />
+			</SidebarTitle>
+			<SidebarLinks>
+				<SidebarLink
+					href="/"
+					passHref
+					className={isActive("/") ? "active" : ""}
+				>
+					{isActive("/") ? <HouseDoorFill /> : <HouseDoor />}
+					Home
+				</SidebarLink>
+				{user ? (
+					<>
+						<SidebarLink
+							href="/post/new"
+							passHref
+							className={isActive("/post/new") ? "active" : ""}
+						>
+							{isActive("/post/new") ? <PenFill /> : <Pen />}
+							New post
+						</SidebarLink>
+						<SidebarLink
+							href="/messages"
+							passHref
+							className={isActive("/messages") ? "active" : ""}
+						>
+							<NotificationBadge>
+								{formatNotificationCount(11)}
+							</NotificationBadge>
+							{isActive("/messages") ? <ChatLeftTextFill /> : <ChatLeftText />}
+							Messages
+						</SidebarLink>
+						<SidebarLink
+							href="/notifications"
+							passHref
+							className={isActive("/notifications") ? "active" : ""}
+						>
+							<NotificationBadge>
+								{formatNotificationCount(1)}
+							</NotificationBadge>
+							{isActive("/notifications") ? <BellFill /> : <Bell />}
+							Notifications
+						</SidebarLink>
+						<SidebarLink
+							href="/settings"
+							passHref
+							className={isActive("/settings") ? "active" : ""}
+						>
+							{isActive("/settings") ? <GearWideConnected /> : <GearWide />}
+							Settings
+						</SidebarLink>
+					</>
+				) : null}
+			</SidebarLinks>
+			<SidebarActions>
+				{user ? (
+					<SidebarButton onClick={logout}>
+						<DoorClosed />
+						Logout
+					</SidebarButton>
+				) : (
+					<SidebarButton onClick={toggleModal}>
+						<DoorOpen />
+						Login
+					</SidebarButton>
+				)}
+			</SidebarActions>
+		</SidebarContainer>
 	)
 }
 

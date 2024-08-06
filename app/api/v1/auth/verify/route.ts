@@ -10,58 +10,58 @@ import {
 
 export async function POST(req: any) {
 	try {
-	const { usernameOrEmail, code } = await req.json()
+		const { usernameOrEmail, code } = await req.json()
 
-	if (!usernameOrEmail) {
-		return badRequestResponse("Username or email is required")
-	}
+		if (!usernameOrEmail) {
+			return badRequestResponse("Username or email is required")
+		}
 
-	if (!code) {
-		return badRequestResponse("Code is required")
-	}
+		if (!code) {
+			return badRequestResponse("Code is required")
+		}
 
-	const user = await prisma.user.findFirst({
-		where: {
-		OR: [
-			{
-			username: usernameOrEmail,
+		const user = await prisma.user.findFirst({
+			where: {
+				OR: [
+					{
+						username: usernameOrEmail,
+					},
+					{
+						email: usernameOrEmail,
+					},
+				],
 			},
-			{
-			email: usernameOrEmail,
+			select: {
+				id: true,
+				verificationCode: true,
+				email: true,
+				username: true,
 			},
-		],
-		},
-		select: {
-		id: true,
-		verificationCode: true,
-		email: true,
-		username: true,
-		},
-	})
+		})
 
-	if (!user) {
-		return unauthorizedResponse("User not found")
-	}
+		if (!user) {
+			return unauthorizedResponse("User not found")
+		}
 
-	if (user.verificationCode !== code) {
-		return unauthorizedResponse("Invalid code")
-	}
+		if (user.verificationCode !== code) {
+			return unauthorizedResponse("Invalid code")
+		}
 
-	await prisma.user.update({
-		where: {
-		id: user.id,
-		},
-		data: {
-		verified: true,
-		verificationCode: null,
-		},
-	})
+		await prisma.user.update({
+			where: {
+				id: user.id,
+			},
+			data: {
+				verified: true,
+				verificationCode: null,
+			},
+		})
 
-	await sendEmail({
-		to: user.email,
-		subject: "Welcome to Ephemr",
-		text: `Hello ${user.username},\n\nYour account has been verified.\n\nRegards,\nEphemeris Team`,
-		html: `
+		await sendEmail({
+			to: user.email,
+			subject: "Welcome to Ephemr",
+			text: `Hello ${user.username},\n\nYour account has been verified.\n\nRegards,\nEphemeris Team`,
+			html: `
 		<!DOCTYPE html>
 		<html lang="en">
 			<head>
@@ -117,18 +117,18 @@ export async function POST(req: any) {
 			</body>
 		</html>
 		`,
-	})
+		})
 
-	return successResponse({ message: "Account verified" })
+		return successResponse({ message: "Account verified" })
 	} catch (e) {
-	console.error("Error verifying account: ", e)
-	return internalServerErrorResponse()
+		console.error("Error verifying account: ", e)
+		return internalServerErrorResponse()
 	}
 }
 
 export async function OPTIONS() {
 	return optionsResponse({
-	"Access-Control-Allow-Origin": "*",
-	"Access-Control-Allow-Methods": "POST",
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "POST",
 	})
 }

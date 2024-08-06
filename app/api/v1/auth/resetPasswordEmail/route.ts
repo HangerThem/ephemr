@@ -12,45 +12,45 @@ import { sendEmail } from "@/utils/emailUtils"
 
 export async function POST(req: any) {
 	try {
-	const { email } = await req.json()
+		const { email } = await req.json()
 
-	if (!email) {
-		return badRequestResponse("Email is required")
-	}
+		if (!email) {
+			return badRequestResponse("Email is required")
+		}
 
-	if (!emailRegex.test(email)) {
-		return badRequestResponse("Invalid email")
-	}
+		if (!emailRegex.test(email)) {
+			return badRequestResponse("Invalid email")
+		}
 
-	const user = await prisma.user.findUnique({
-		where: {
-		email,
-		},
-	})
+		const user = await prisma.user.findUnique({
+			where: {
+				email,
+			},
+		})
 
-	if (!user) {
-		return successResponse("Email sent")
-	}
+		if (!user) {
+			return successResponse("Email sent")
+		}
 
-	const token = generateToken({ payload: email, expiresIn: "1d" })
+		const token = generateToken({ payload: email, expiresIn: "1d" })
 
-	await prisma.user.update({
-		where: {
-		email,
-		},
-		data: {
-		resetToken: token,
-		resetTokenExpiry: new Date(Date.now() + 1000 * 60 * 60 * 24),
-		},
-	})
+		await prisma.user.update({
+			where: {
+				email,
+			},
+			data: {
+				resetToken: token,
+				resetTokenExpiry: new Date(Date.now() + 1000 * 60 * 60 * 24),
+			},
+		})
 
-	const resetLink = `${process.env.BASE_URL}/resetPassword/${token}`
+		const resetLink = `${process.env.BASE_URL}/resetPassword/${token}`
 
-	await sendEmail({
-		to: email,
-		subject: "Reset your Ephemr password",
-		text: `A password reset has been requested for the account with the email ${email}. Please reset your password by clicking the link below.\n\n${resetLink}\n\nIf you didn't initiate this action, please disregard this email.`,
-		html: `
+		await sendEmail({
+			to: email,
+			subject: "Reset your Ephemr password",
+			text: `A password reset has been requested for the account with the email ${email}. Please reset your password by clicking the link below.\n\n${resetLink}\n\nIf you didn't initiate this action, please disregard this email.`,
+			html: `
 		<!DOCTYPE html>
 		<html lang="en">
 			<head>
@@ -107,18 +107,18 @@ export async function POST(req: any) {
 			</body>
 		</html>
 		`,
-	})
+		})
 
-	return successResponse({ message: "Email sent" })
+		return successResponse({ message: "Email sent" })
 	} catch (e) {
-	console.error("Error resetting password: ", e)
-	return internalServerErrorResponse()
+		console.error("Error resetting password: ", e)
+		return internalServerErrorResponse()
 	}
 }
 
 export async function OPTIONS() {
 	return optionsResponse({
-	"Access-Control-Allow-Origin": "*",
-	"Access-Control-Allow-Methods": "POST",
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "POST",
 	})
 }

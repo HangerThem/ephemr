@@ -8,65 +8,65 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, res: NextResponse) {
 	try {
-	const query = decodeURIComponent(req.url.split("q=")[1])
+		const query = decodeURIComponent(req.url.split("q=")[1])
 
-	const users = await prisma.user.findMany({
-		where: {
-		OR: [
-			{
-			username: {
-				contains: query,
+		const users = await prisma.user.findMany({
+			where: {
+				OR: [
+					{
+						username: {
+							contains: query,
+						},
+					},
+					{
+						displayName: {
+							contains: query,
+						},
+					},
+				],
 			},
-			},
-			{
-			displayName: {
-				contains: query,
-			},
-			},
-		],
-		},
-		select: {
-		id: true,
-		username: true,
-		displayName: true,
-		lastSeen: true,
-		online: true,
-		profilePic: true,
-		settings: {
 			select: {
-			activityStatus: true,
+				id: true,
+				username: true,
+				displayName: true,
+				lastSeen: true,
+				online: true,
+				profilePic: true,
+				settings: {
+					select: {
+						activityStatus: true,
+					},
+				},
 			},
-		},
-		},
-		orderBy: {
-		username: "asc",
-		},
-		take: 5,
-	})
+			orderBy: {
+				username: "asc",
+			},
+			take: 5,
+		})
 
-	const response = users.map((user) => {
-		const activityStatus = user?.settings?.activityStatus
+		const response = users.map((user) => {
+			const activityStatus = user?.settings?.activityStatus
 
-		return {
-		id: user.id,
-		username: user.username,
-		displayName: user.displayName,
-		profilePic: user.profilePic,
-		lastSeen: activityStatus ? user.lastSeen : null,
-		online: activityStatus ? user.online : false,
-		}
-	})
+			return {
+				id: user.id,
+				username: user.username,
+				displayName: user.displayName,
+				profilePic: user.profilePic,
+				lastSeen: activityStatus ? user.lastSeen : null,
+				online: activityStatus ? user.online : false,
+			}
+		})
 
-	return successResponse({ users: response })
+		return successResponse({ users: response })
 	} catch (e) {
-	console.error("Error getting users: ", e)
-	return internalServerErrorResponse()
+		console.error("Error getting users: ", e)
+		return internalServerErrorResponse()
 	}
 }
 
 export async function OPTIONS(req: NextRequest, res: NextResponse) {
 	return optionsResponse({
-	"Access-Control-Allow-Origin": "*",
-	"Access-Control-Allow-Methods": "GET",
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "GET",
 	})
 }

@@ -14,7 +14,7 @@ export const Form = styled.form`
 	border: 1px solid rgba(var(--light), 0.25);
 
 	&.full {
-	width: 100%;
+		width: 100%;
 	}
 `
 
@@ -33,7 +33,7 @@ export const FormClose = styled(X)`
 	transition: color 0.2s;
 
 	&:hover {
-	color: rgb(var(--light));
+		color: rgb(var(--light));
 	}
 `
 
@@ -62,15 +62,15 @@ export const FormInput = styled.input`
 	transition: border 0.2s ease;
 
 	&:focus {
-	border: 1px solid rgb(var(--light));
+		border: 1px solid rgb(var(--light));
 	}
 
 	&:focus + ${FormLabel} {
-	color: rgb(var(--light));
+		color: rgb(var(--light));
 	}
 
 	&.password {
-	padding-right: 2rem;
+		padding-right: 2rem;
 	}
 `
 
@@ -95,7 +95,7 @@ export const FormCodeInput = styled.input`
 	transition: border 0.2s ease;
 
 	&:focus {
-	border: 1px solid rgb(var(--light));
+		border: 1px solid rgb(var(--light));
 	}
 `
 
@@ -118,7 +118,7 @@ export const FormArea = styled.textarea`
 	overflow-wrap: break-word;
 
 	&:focus {
-	border: 1px solid rgb(var(--light));
+		border: 1px solid rgb(var(--light));
 	}
 `
 
@@ -128,21 +128,21 @@ export const FormField = styled.div`
 	margin-bottom: 1rem;
 
 	&.error {
-	${FormInput} {
-		border: 1px solid rgb(var(--danger));
-	}
+		${FormInput} {
+			border: 1px solid rgb(var(--danger));
+		}
 
-	${FormArea} {
-		border: 1px solid rgb(var(--danger));
-	}
+		${FormArea} {
+			border: 1px solid rgb(var(--danger));
+		}
 
-	${FormCodeInput} {
-		border: 1px solid rgb(var(--danger));
-	}
+		${FormCodeInput} {
+			border: 1px solid rgb(var(--danger));
+		}
 
-	${FormLabel} {
-		color: rgb(var(--danger));
-	}
+		${FormLabel} {
+			color: rgb(var(--danger));
+		}
 	}
 `
 
@@ -181,6 +181,6 @@ export const FormLink = styled(Link)`
 	cursor: pointer;
 
 	&:hover {
-	text-decoration: underline;
+		text-decoration: underline;
 	}
 `
