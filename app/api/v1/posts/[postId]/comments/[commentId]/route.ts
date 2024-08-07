@@ -85,6 +85,7 @@ export async function PATCH(
 			},
 			select: {
 				id: true,
+				postId: true,
 				content: true,
 				createdAt: true,
 				updatedAt: true,
@@ -106,6 +107,7 @@ export async function PATCH(
 				_count: {
 					select: {
 						commentLike: true,
+						replies: true,
 					},
 				},
 			},

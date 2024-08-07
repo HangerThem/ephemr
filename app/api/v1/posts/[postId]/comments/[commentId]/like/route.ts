@@ -114,6 +114,7 @@ export async function POST(
 			},
 			select: {
 				id: true,
+				postId: true,
 				content: true,
 				createdAt: true,
 				updatedAt: true,
@@ -135,6 +136,7 @@ export async function POST(
 				_count: {
 					select: {
 						commentLike: true,
+						replies: true,
 					},
 				},
 			},
@@ -220,6 +222,7 @@ export async function DELETE(
 			},
 			select: {
 				id: true,
+				postId: true,
 				content: true,
 				createdAt: true,
 				updatedAt: true,
@@ -241,6 +244,7 @@ export async function DELETE(
 				_count: {
 					select: {
 						commentLike: true,
+						replies: true,
 					},
 				},
 			},

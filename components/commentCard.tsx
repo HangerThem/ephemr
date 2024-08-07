@@ -12,6 +12,10 @@ import {
 import { isError } from "@/utils/isError"
 import { useState, useOptimistic, startTransition } from "react"
 import { useAuth } from "@/context/authContext"
+import {
+	requestLikeComment,
+	requestUnlikeComment,
+} from "@/services/api-services/commentService"
 
 const Card = styled.div`
 	background-color: rgb(var(--dark));
@@ -53,14 +57,14 @@ const ProfileWrapper = styled.div`
 	}
 `
 
-const PostActions = styled.div`
+const CommentActions = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
 	margin-top: 1rem;
 `
 
-const PostAction = styled.div`
+const CommentAction = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -82,7 +86,7 @@ const PostAction = styled.div`
 	}
 `
 
-const PostContent = styled(Link)`
+const CommentContent = styled(Link)`
 	margin-bottom: 1rem;
 	font-size: 0.9rem;
 	overflow: hidden;
@@ -100,21 +104,21 @@ const PostContent = styled(Link)`
 	}
 `
 
-interface IPostSimpleCardProps {
-	postData: IPostSimple
+interface ICommentCardProps {
+	commentData: IComment
 }
 
-const PostCard = ({ postData }: IPostSimpleCardProps) => {
-	const [post, setPost] = useState<IPostSimple>(postData)
+const CommentCard = ({ commentData }: ICommentCardProps) => {
+	const [comment, setComment] = useState<IComment>(commentData)
 	const { user, toggleModal } = useAuth()
 	const [optimisticIsLiked, setOptimisticIsLiked] = useOptimistic<boolean>(
-		post.isLiked || false
+		comment.isLiked || false
 	)
 	const [optimisticLikeCount, setOptimisticLikeCount] = useOptimistic<number>(
-		post._count.postLike
+		comment._count.commentLike
 	)
 
-	const handleLike = (post: IPostSimple) => {
+	const handleLike = (post: IComment) => {
 		if (!user) {
 			toggleModal()
 			return
@@ -128,8 +132,8 @@ const PostCard = ({ postData }: IPostSimpleCardProps) => {
 			setOptimisticLikeCount(newLikeCount)
 
 			const response = optimisticIsLiked
-				? await requestUnlikePost(post.id)
-				: await requestLikePost(post.id)
+				? await requestUnlikeComment(comment.postId, comment.id)
+				: await requestLikeComment(comment.postId, comment.id)
 
 			if (isError(response)) {
 				console.error(response)
@@ -138,44 +142,43 @@ const PostCard = ({ postData }: IPostSimpleCardProps) => {
 				return
 			}
 
-			setPost(response.post)
+			setComment(response.comment)
 		})
 	}
 
 	return (
 		<Card>
 			<Info>
-				<ProfileLink href={`/${post.user.username}`}>
+				<ProfileLink href={`/${comment.user.username}`}>
 					<Avatar
-						seed={post.user.displayName}
+						seed={comment.user.displayName}
 						size={30}
-						online={post.user.online}
+						online={comment.user.online}
 					/>
 					<ProfileWrapper>
-						<h3>{post.user.displayName}</h3>
-						<p>@{post.user.username}</p>
+						<h3>{comment.user.displayName}</h3>
+						<p>@{comment.user.username}</p>
 					</ProfileWrapper>
 				</ProfileLink>
-				<p>{timeSince(new Date(post.createdAt))}</p>
+				<p>{timeSince(new Date(comment.createdAt))}</p>
 			</Info>
-			{post.mood && <p>{post.mood.name}</p>}
-			<PostContent href={`/post/${post.id}`}>
-				{formatContentForDisplay(post.content)}
-			</PostContent>
-			<PostActions>
-				<PostAction onClick={() => handleLike(post)}>
+			<CommentContent href={`/comment/${comment.id}`}>
+				{formatContentForDisplay(comment.content)}
+			</CommentContent>
+			<CommentActions>
+				<CommentAction onClick={() => handleLike(comment)}>
 					{optimisticIsLiked ? <HeartFill /> : <Heart />}
 					<span>{optimisticLikeCount}</span>
-				</PostAction>
-				<Link href={`/post/${post.id}`}>
-					<PostAction>
+				</CommentAction>
+				<Link href={`/comment/${comment.id}`}>
+					<CommentAction>
 						<Chat />
-						<span>{formatCount(post._count.comments)}</span>
-					</PostAction>
+						<span>{formatCount(comment._count.replies)}</span>
+					</CommentAction>
 				</Link>
-			</PostActions>
+			</CommentActions>
 		</Card>
 	)
 }
 
-export default PostCard
+export default CommentCard

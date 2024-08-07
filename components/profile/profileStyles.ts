@@ -1,5 +1,15 @@
 import styled from "styled-components"
 
+export const ProfileWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	padding: 2rem 0;
+	width: 100%;
+	max-width: 600px;
+`
+
 export const ProfileHeader = styled.div`
 	display: flex;
 	align-items: flex-start;
@@ -8,7 +18,6 @@ export const ProfileHeader = styled.div`
 	gap: 1rem;
 	padding-bottom: 1rem;
 	width: 100%;
-	max-width: 600px;
 	border-bottom: 1px solid rgba(var(--light), 0.1);
 `
 
@@ -48,6 +57,29 @@ export const ProfileStat = styled.div`
 	width: 100px;
 
 	&:last-child {
-	border-right: none;
+		border-right: none;
+	}
+`
+
+export const ProfileBio = styled.p`
+	color: rgba(var(--light), 0.75);
+	padding-left: 0.5rem;
+	border-left: 4px solid rgba(var(--light), 0.5);
+`
+
+export const ProfileInformation = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	width: 100%;
+`
+
+export const ProfileInformationItem = styled.p`
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	a:hover {
+		text-decoration: underlineP;
 	}
 `

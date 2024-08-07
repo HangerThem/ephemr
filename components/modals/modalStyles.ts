@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { X } from "react-bootstrap-icons"
 
 export const ModalContainer = styled.dialog`
 	position: absolute;
@@ -11,7 +12,21 @@ export const ModalContainer = styled.dialog`
 	outline: none;
 
 	&::backdrop {
-	backdrop-filter: blur(5px);
-	background: rgba(var(--dark), 0.75);
+		backdrop-filter: blur(5px);
+		background: rgba(var(--dark), 0.75);
+	}
+`
+
+export const ModalClose = styled(X)`
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 20px;
+	cursor: pointer;
+	color: rgba(var(--light), 0.5);
+	transition: color 0.2s;
+
+	&:hover {
+		color: rgb(var(--light));
 	}
 `
