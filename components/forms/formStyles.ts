@@ -125,6 +125,7 @@ export const FormArea = styled.textarea`
 export const FormField = styled.div`
 	position: relative;
 	width: 100%;
+	max-width: 350px;
 	margin-bottom: 1rem;
 
 	&.error {

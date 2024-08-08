@@ -3,14 +3,9 @@ interface IUserFull extends IUserSimple {
 	isFollowed?: boolean
 	createdAt: Date
 	_count: {
-	followers: number
-	following: number
-	posts: number
+		followers: number
+		following: number
+		posts: number
 	}
-	userInformation: {
-	bio?: string
-	location?: string
-	website?: string
-	pronouns?: string
-	}
+	userInformation: IUserInformation
 }

@@ -2,19 +2,64 @@
 
 import { downloadDataService } from "@/services/api-services/downloadDataService"
 import {
+	FormArea,
 	FormField,
 	FormInput,
 	FormLabel as PrestyledFormLabel,
-	FormArea,
 } from "@/components/forms/formStyles"
 import {
 	requestUpdateMe,
 	requestUpdateProfilePic,
 	requestDeleteProfilePic,
+	requestUpdateUserInformation,
 } from "@/services/api-services/meService"
 import styled from "styled-components"
 import { useAuth } from "@/context/authContext"
 import { useState } from "react"
+import Link from "next/link"
+
+const SettingsWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	padding-inline: 5rem;
+	scrollbar-width: none;
+	gap: 5rem;
+	height: calc(100vh - 5.5rem);
+	overflow: auto;
+`
+
+const SettingsNav = styled.nav`
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	padding-top: 5rem;
+	align-items: flex-end;
+	position: sticky;
+	gap: 1rem;
+	flex: 1;
+	height: calc(100vh - 5.5rem);
+	overflow: auto;
+
+	a {
+		font-size: 1.25rem;
+		text-decoration: none;
+		color: rgba(var(--light), 0.75);
+
+		&:hover {
+			color: rgba(var(--light), 1);
+		}
+	}
+`
+
+const SettingsActions = styled.div`
+	flex: 3;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
 
 const FormLabel = styled(PrestyledFormLabel)`
 	background-color: rgb(var(--background));
@@ -52,6 +97,19 @@ export default function Page() {
 		}
 	}
 
+	const handleUpdateUserInformation = async (
+		e: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement>
+	) => {
+		const { name, value } = e.target
+
+		try {
+			await requestUpdateUserInformation({ [name]: value })
+			getUser()
+		} catch (e) {
+			console.error("Error updating user information: ", e)
+		}
+	}
+
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0]
 		if (file) {
@@ -85,8 +143,22 @@ export default function Page() {
 	}
 
 	return (
-		<div>
-			<section>
+		<SettingsWrapper>
+			<SettingsNav>
+				<Link href="#profile" passHref>
+					Profile
+				</Link>
+				<Link href="#security" passHref>
+					Security
+				</Link>
+				<Link href="#notifications" passHref>
+					Notifications
+				</Link>
+				<Link href="#data" passHref>
+					Data
+				</Link>
+			</SettingsNav>
+			<SettingsActions>
 				<h1>Profile Information</h1>
 				<FormField>
 					<FormInput
@@ -98,13 +170,39 @@ export default function Page() {
 					<FormLabel>Display Name</FormLabel>
 				</FormField>
 				<FormField>
-					<FormInput
-						type="email"
-						defaultValue={user?.email}
-						name="email"
-						onBlur={handleUpdate}
+					<FormArea
+						defaultValue={user?.userInformation.bio}
+						name="bio"
+						onBlur={handleUpdateUserInformation}
 					/>
-					<FormLabel>Email</FormLabel>
+					<FormLabel>Bio</FormLabel>
+				</FormField>
+				<FormField>
+					<FormInput
+						type="text"
+						defaultValue={user?.userInformation.location}
+						name="location"
+						onBlur={handleUpdateUserInformation}
+					/>
+					<FormLabel>Location</FormLabel>
+				</FormField>
+				<FormField>
+					<FormInput
+						type="text"
+						defaultValue={user?.userInformation.website}
+						name="website"
+						onBlur={handleUpdateUserInformation}
+					/>
+					<FormLabel>Website</FormLabel>
+				</FormField>
+				<FormField>
+					<FormInput
+						type="text"
+						defaultValue={user?.userInformation.pronouns}
+						name="pronouns"
+						onBlur={handleUpdateUserInformation}
+					/>
+					<FormLabel>Pronouns</FormLabel>
 				</FormField>
 
 				<form onSubmit={handleImageUpload}>
@@ -121,7 +219,7 @@ export default function Page() {
 				</form>
 
 				<button onClick={handleImageDelete}>Delete Profile Picture</button>
-			</section>
-		</div>
+			</SettingsActions>
+		</SettingsWrapper>
 	)
 }

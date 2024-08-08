@@ -15,6 +15,7 @@ const HeaderContainer = styled.header`
 	position: sticky;
 	background-color: rgb(var(--background));
 	top: 0;
+	height: 4.5rem;
 	z-index: 100;
 	margin-bottom: 1rem;
 `

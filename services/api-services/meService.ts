@@ -27,6 +27,23 @@ export const requestUpdateMe = async (
 	})
 }
 
+export const requestUpdateUserInformation = async (
+	userInformation: IUpdatreUserInformation
+): Promise<
+	| {
+			status: number
+			userInfo: IUserInformation
+	  }
+	| IErrorResponse
+> => {
+	return await patch<{
+		status: number
+		userInfo: IUserInformation
+	}>("/me/userInformation", {
+		...userInformation,
+	})
+}
+
 export const requestUpdateProfilePic = async (
 	profilePic: File
 ): Promise<

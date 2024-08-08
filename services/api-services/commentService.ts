@@ -4,14 +4,14 @@ export const requestGetComments = async (
 	postId: string
 ): Promise<
 	| {
-		status: number
-		comments: IComment[]
-	}
+			status: number
+			comments: IComment[]
+	  }
 	| IErrorResponse
 > => {
 	return await get<{
-	status: number
-	comments: IComment[]
+		status: number
+		comments: IComment[]
 	}>(`/posts/${postId}/comments`)
 }
 
@@ -20,16 +20,16 @@ export const requestCreateComment = async (
 	content: string
 ): Promise<
 	| {
-		status: number
-		comment: IComment
-	}
+			status: number
+			comment: IComment
+	  }
 	| IErrorResponse
 > => {
 	return await post<{
-	status: number
-	comment: IComment
+		status: number
+		comment: IComment
 	}>(`/posts/${postId}/comments`, {
-	content,
+		content,
 	})
 }
 
@@ -38,8 +38,8 @@ export const requestDeleteComment = async (
 	commentId: string
 ): Promise<IErrorResponse> => {
 	return await requestDelete<IErrorResponse>(
-	`/posts/${postId}/comments/${commentId}`,
-	{}
+		`/posts/${postId}/comments/${commentId}`,
+		{}
 	)
 }
 
@@ -49,16 +49,16 @@ export const requestEditComment = async (
 	content: string
 ): Promise<
 	| {
-		status: number
-		comment: IComment
-	}
+			status: number
+			comment: IComment
+	  }
 	| IErrorResponse
 > => {
 	return await patch<{
-	status: number
-	comment: IComment
+		status: number
+		comment: IComment
 	}>(`/posts/${postId}/comments/${commentId}`, {
-	content,
+		content,
 	})
 }
 
@@ -67,17 +67,17 @@ export const requestLikeComment = async (
 	commentId: string
 ): Promise<
 	| {
-		status: number
-		comment: IComment
-	}
+			status: number
+			comment: IComment
+	  }
 	| IErrorResponse
 > => {
 	return await post<
-	| {
-		status: number
-		comment: IComment
-		}
-	| IErrorResponse
+		| {
+				status: number
+				comment: IComment
+		  }
+		| IErrorResponse
 	>(`/posts/${postId}/comments/${commentId}/like`, {})
 }
 
@@ -86,16 +86,16 @@ export const requestUnlikeComment = async (
 	commentId: string
 ): Promise<
 	| {
-		status: number
-		comment: IComment
-	}
+			status: number
+			comment: IComment
+	  }
 	| IErrorResponse
 > => {
 	return await requestDelete<
-	| {
-		status: number
-		comment: IComment
-		}
-	| IErrorResponse
+		| {
+				status: number
+				comment: IComment
+		  }
+		| IErrorResponse
 	>(`/posts/${postId}/comments/${commentId}/like`, {})
 }
