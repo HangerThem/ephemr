@@ -100,6 +100,27 @@ export async function patch<Res>(
 	).json() as Res
 }
 
+export async function patchFormData<Res>(
+	url: string,
+	body: FormData,
+	cache?: "no-store" | "force-cache",
+	revalidate?: number
+): Promise<Res> {
+	const token = localStorage.getItem("ephemrToken")
+
+	return (
+		await fetch(API_URL + url, {
+			method: "PATCH",
+			//cache: cache ?? "no-store",
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			body,
+			next: { revalidate: revalidate ?? 0 },
+		})
+	).json() as Res
+}
+
 export async function requestDelete<Res>(
 	url: string,
 	body: any,
