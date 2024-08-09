@@ -48,6 +48,10 @@ export const FormLabel = styled.label`
 	background-color: rgb(var(--dark));
 	padding: 0 0.5rem;
 	transition: color 0.2s ease;
+
+	&.bg-transparent {
+		background-color: rgb(var(--background));
+	}
 `
 
 export const FormInput = styled.input`
@@ -171,10 +175,6 @@ export const FormFieldDouble = styled(FormField)`
 	grid-template-columns: 1fr 1fr;
 	gap: 1rem;
 	width: 100%;
-
-	div {
-		position: relative;
-	}
 `
 
 export const FormPasswordShow = styled.div`
@@ -195,7 +195,7 @@ export const EyeSlash = styled(EyeSlashFill)`
 
 export const ErrorMessage = styled.p`
 	color: rgb(var(--danger));
-	font-size: 0.6rem;
+	font-size: 0.75rem;
 	position: absolute;
 	left: 10px;
 	bottom: -15px;
@@ -214,4 +214,14 @@ export const FormLink = styled(Link)`
 	&:hover {
 		text-decoration: underline;
 	}
+`
+
+export const FormSuccess = styled.p`
+	width: 100%;
+	max-width: 450px;
+	padding: 0.5rem;
+	border-radius: 5px;
+	border: 1px solid rgba(var(--success), 0.5);
+	background-color: rgba(var(--success), 0.1);
+	cursor: pointer;
 `

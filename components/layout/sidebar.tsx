@@ -112,6 +112,9 @@ const Sidebar = () => {
 	const pathname = usePathname()
 
 	const isActive = (path: string) => {
+		if (path === "/settings") {
+			return pathname.startsWith("/settings")
+		}
 		return pathname === path || pathname === `${path}/[id]`
 	}
 
@@ -171,7 +174,7 @@ const Sidebar = () => {
 							Notifications
 						</SidebarLink>
 						<SidebarLink
-							href="/settings"
+							href="/settings/profile"
 							passHref
 							className={isActive("/settings") ? "active" : ""}
 						>

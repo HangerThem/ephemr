@@ -9,31 +9,7 @@ import {
 } from "@/helpers/apiHelper"
 import { NextRequest, NextResponse } from "next/server"
 import { verifyToken } from "@/utils/jwt"
-import { emailRegex } from "@/constants/emailRegex"
-
-export async function GET(req: NextRequest, res: NextResponse) {
-	try {
-		const query = decodeURIComponent(req.url.split("username=")[1])
-
-		const user = await prisma.user.findUnique({
-			where: {
-				username: query,
-			},
-			select: {
-				email: true,
-			},
-		})
-
-		if (!user) {
-			return notFoundResponse("User not found")
-		}
-
-		return successResponse({ email: user.email })
-	} catch (e) {
-		console.error("Error getting post: ", e)
-		return internalServerErrorResponse()
-	}
-}
+import { verifyPassword, hashPassword } from "@/utils/bcryptjs"
 
 export async function PATCH(req: NextRequest, res: NextResponse) {
 	try {
@@ -55,24 +31,14 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 			return unauthorizedResponse("Invalid token")
 		}
 
-		const { email } = await req.json()
+		const { currentPassword, newPassword, confirmPassword } = await req.json()
 
-		if (!email) {
-			badRequestResponse("No email provided")
+		if (!currentPassword || !newPassword || !confirmPassword) {
+			return badRequestResponse("Missing fields")
 		}
 
-		if (!emailRegex.test(email)) {
-			badRequestResponse("Invalid email")
-		}
-
-		const emailInUse = await prisma.user.findUnique({
-			where: {
-				email,
-			},
-		})
-
-		if (emailInUse) {
-			return badRequestResponse("Email already in use")
+		if (newPassword !== confirmPassword) {
+			return badRequestResponse("Passwords do not match")
 		}
 
 		const user = await prisma.user.findUnique({
@@ -85,16 +51,24 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 			return notFoundResponse("User not found")
 		}
 
+		const passwordMatch = await verifyPassword(currentPassword, user.password)
+
+		if (!passwordMatch) {
+			return unauthorizedResponse("Invalid password")
+		}
+
+		const newPasswordHashed = await hashPassword(newPassword)
+
 		await prisma.user.update({
 			where: {
 				id: decoded.id,
 			},
 			data: {
-				email,
+				password: newPasswordHashed,
 			},
 		})
 
-		return successResponse({ message: "Email updated" })
+		return successResponse({ message: "Password updated" })
 	} catch (e) {
 		return internalServerErrorResponse()
 	}
@@ -103,6 +77,6 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 export async function OPTIONS() {
 	return optionsResponse({
 		"Access-Control-Allow-Origin": "*",
-		"Access-Control-Allow-Methods": "GET, PATCH",
+		"Access-Control-Allow-Methods": "PATCH",
 	})
 }

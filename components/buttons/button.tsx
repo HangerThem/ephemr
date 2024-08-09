@@ -15,7 +15,7 @@ const ButtonWrapper = styled.button`
 	font-size: 0.8rem;
 	height: 35px;
 	font-weight: 500;
-	transition: background-color 0.2s ease;
+	transition: background-color 0.2s ease, color 0.2s ease, border 0.2s ease;
 	width: 100%;
 	background-color: rgba(var(--light), 0.1);
 	border: 1px solid rgba(var(--light), 0.2);
@@ -51,6 +51,8 @@ const ButtonWrapper = styled.button`
 	&:disabled {
 		cursor: default;
 		background-color: rgba(var(--light), 0.1);
+		border-color: rgba(var(--light), 0.15);
+		color: rgba(var(--light), 0.5);
 	}
 `
 

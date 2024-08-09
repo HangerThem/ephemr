@@ -1,24 +1,24 @@
-import { get, post } from "../requestHelpers"
+import { get, post, patch } from "../requestHelpers"
 
 export const requestLogin = async (
 	user: ILoginUser
 ): Promise<
 	| {
-		status: number
-		token: string
-		refreshToken: string
-	}
+			status: number
+			token: string
+			refreshToken: string
+	  }
 	| IErrorResponse
 > => {
 	return await post<
-	| {
-		status: number
-		token: string
-		refreshToken: string
-		}
-	| IErrorResponse
+		| {
+				status: number
+				token: string
+				refreshToken: string
+		  }
+		| IErrorResponse
 	>("/auth/login", {
-	...user,
+		...user,
 	})
 }
 
@@ -26,21 +26,21 @@ export const requestRegister = async (
 	user: IRegisterUser
 ): Promise<
 	| {
-		status: number
-		token: string
-		refreshToken: string
-	}
+			status: number
+			token: string
+			refreshToken: string
+	  }
 	| IErrorResponse
 > => {
 	return await post<
-	| {
-		status: number
-		token: string
-		refreshToken: string
-		}
-	| IErrorResponse
+		| {
+				status: number
+				token: string
+				refreshToken: string
+		  }
+		| IErrorResponse
 	>("/auth/register", {
-	...user,
+		...user,
 	})
 }
 
@@ -49,20 +49,20 @@ export const requestVerify = async (
 	code: string
 ): Promise<
 	| {
-		status: number
-		message: string
-	}
+			status: number
+			message: string
+	  }
 	| IErrorResponse
 > => {
 	return await post<
-	| {
-		status: number
-		message: string
-		}
-	| IErrorResponse
+		| {
+				status: number
+				message: string
+		  }
+		| IErrorResponse
 	>("/auth/verify", {
-	usernameOrEmail,
-	code,
+		usernameOrEmail,
+		code,
 	})
 }
 
@@ -70,16 +70,56 @@ export const requestEmail = async (
 	username: string
 ): Promise<
 	| {
-		status: number
-		email: string
-	}
+			status: number
+			email: string
+	  }
 	| IErrorResponse
 > => {
 	return await get<
-	| {
-		status: number
-		email: string
-		}
-	| IErrorResponse
+		| {
+				status: number
+				email: string
+		  }
+		| IErrorResponse
 	>(`/auth/email?username=${username}`)
+}
+
+export const requestUpdateEmail = async (
+	email: string
+): Promise<
+	| {
+			status: number
+			message: string
+	  }
+	| IErrorResponse
+> => {
+	return await patch<
+		| {
+				status: number
+				message: string
+		  }
+		| IErrorResponse
+	>("/auth/email", {
+		email,
+	})
+}
+
+export const requestUpdatePassword = async (
+	passwords: IUpdatePasswords
+): Promise<
+	| {
+			status: number
+			message: string
+	  }
+	| IErrorResponse
+> => {
+	return await patch<
+		| {
+				status: number
+				message: string
+		  }
+		| IErrorResponse
+	>("/auth/password", {
+		...passwords,
+	})
 }

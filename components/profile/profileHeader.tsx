@@ -19,6 +19,7 @@ import { ModalContainer } from "@/components/modals/modalStyles"
 import { useRef } from "react"
 import { format } from "date-fns"
 import { CalendarEvent, GeoAlt, Globe2 } from "react-bootstrap-icons"
+import { formatContentForDisplay } from "@/utils/formatContentForDisplay"
 import Link from "next/link"
 
 export default function CurrentUserProfile({
@@ -92,7 +93,9 @@ export default function CurrentUserProfile({
 				/>
 			</ProfileTop>
 			{user.userInformation.bio && (
-				<ProfileBio>{user.userInformation.bio}</ProfileBio>
+				<ProfileBio>
+					{formatContentForDisplay(user.userInformation.bio)}
+				</ProfileBio>
 			)}
 			<ProfileInformation>
 				<ProfileInformationItem>

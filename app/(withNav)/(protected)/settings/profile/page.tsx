@@ -5,7 +5,7 @@ import {
 	FormField,
 	FormInput,
 	FormFieldDouble,
-	FormLabel as PrestyledLabel,
+	FormLabel,
 } from "@/components/forms/formStyles"
 import {
 	requestUpdateMe,
@@ -19,32 +19,11 @@ import Image from "next/image"
 import { useAuth } from "@/context/authContext"
 import styled from "styled-components"
 import Button from "@/components/buttons/button"
-import { useState } from "react"
-
-const FormLabel = styled(PrestyledLabel)`
-	background-color: rgb(var(--background));
-`
-
-const Section = styled.section`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 1rem;
-
-	& {
-		h2 {
-			font-size: 1.5rem;
-			font-weight: 600;
-			margin-bottom: 1rem;
-		}
-
-		p {
-			font-size: 1rem;
-			color: rgb(var(--light));
-			margin-bottom: 1rem;
-		}
-	}
-`
+import { useEffect, useState } from "react"
+import {
+	SectionsContainer,
+	Section,
+} from "@/components/settings/settingsStyles"
 
 const ProfilePic = styled(Image)`
 	border-radius: 50%;
@@ -64,6 +43,24 @@ export default function Page() {
 		displayName: user?.displayName,
 		username: user?.username,
 	})
+	const [errors, setErrors] = useState({
+		displayName: "",
+	})
+	const [changed, setChanged] = useState(false)
+
+	useEffect(() => {
+		if (
+			user?.displayName !== userData.displayName ||
+			user?.userInformation.bio !== userInformation.bio ||
+			user?.userInformation.location !== userInformation.location ||
+			user?.userInformation.website !== userInformation.website ||
+			user?.userInformation.pronouns !== userInformation.pronouns
+		) {
+			setChanged(true)
+		} else {
+			setChanged(false)
+		}
+	}, [userData, userInformation, user])
 
 	const handleSave = async () => {
 		setLoading(true)
@@ -84,140 +81,138 @@ export default function Page() {
 		  }).toDataUri()
 
 	return (
-		<Section>
+		<SectionsContainer>
 			<h2>Profile</h2>
-			<FormField className="horizontal">
-				<ProfilePic
-					src={profilePicSrc}
-					alt={user?.displayName as string}
-					width={100}
-					height={100}
-				/>
-				<FormInput
-					type="file"
-					accept="image/*"
-					name="profilePic"
-					id="profilePic"
-					onChange={(e) => {
-						const file = e.target.files?.[0]
-						if (file) {
-							setProfilePic(file)
-						}
-					}}
-					hidden
-				/>
-				<Button
-					onClick={() => {
-						const input = document.getElementById(
-							"profilePic"
-						) as HTMLInputElement
-						input.click()
-					}}
-				>
-					Add new
+			<Section>
+				<p>Profile information</p>
+				<FormField className="horizontal">
+					<ProfilePic
+						src={profilePicSrc}
+						alt={user?.displayName as string}
+						width={100}
+						height={100}
+					/>
+					<FormInput
+						type="file"
+						accept="image/*"
+						name="profilePic"
+						id="profilePic"
+						onChange={(e) => {
+							const file = e.target.files?.[0]
+							if (parseInt(file?.size?.toString() ?? "") > 1000000) {
+								return
+							}
+							if (file) {
+								setProfilePic(file)
+							}
+						}}
+						hidden
+					/>
+					<Button
+						onClick={() => {
+							const input = document.getElementById(
+								"profilePic"
+							) as HTMLInputElement
+							input.click()
+						}}
+					>
+						Add new
+					</Button>
+					<Button
+						className="danger"
+						onClick={async () => {
+							await requestDeleteProfilePic()
+							getUser()
+						}}
+					>
+						Delete
+					</Button>
+				</FormField>
+				<FormFieldDouble>
+					<FormField>
+						<FormInput
+							type="text"
+							defaultValue={user?.displayName}
+							name="displayName"
+							minLength={3}
+							onChange={(e) => {
+								setUserData({
+									...userData,
+									displayName: e.target.value,
+								})
+							}}
+						/>
+						<FormLabel className="bg-transparent">Display Name</FormLabel>
+					</FormField>
+					<FormField>
+						<FormInput
+							type="text"
+							defaultValue={user?.userInformation.pronouns}
+							name="pronouns"
+							list="pronouns-list"
+							onChange={(e) => {
+								setUserInformation({
+									...userInformation,
+									pronouns: e.target.value,
+								})
+							}}
+						/>
+						<FormLabel className="bg-transparent">Pronouns</FormLabel>
+						<datalist id="pronouns-list">
+							<option value="He/Him" />
+							<option value="She/Her" />
+							<option value="They/Them" />
+						</datalist>
+					</FormField>
+				</FormFieldDouble>
+				<FormFieldDouble>
+					<FormField>
+						<FormInput
+							type="text"
+							defaultValue={user?.userInformation.location}
+							name="location"
+							onChange={(e) => {
+								setUserInformation({
+									...userInformation,
+									location: e.target.value,
+								})
+							}}
+						/>
+						<FormLabel className="bg-transparent">Location</FormLabel>
+					</FormField>
+					<FormField>
+						<FormInput
+							type="text"
+							defaultValue={user?.userInformation.website}
+							name="website"
+							onChange={(e) => {
+								setUserInformation({
+									...userInformation,
+									website: e.target.value,
+								})
+							}}
+						/>
+						<FormLabel className="bg-transparent">Website</FormLabel>
+					</FormField>
+				</FormFieldDouble>
+				<FormField>
+					<FormArea
+						className="bg-transparent"
+						defaultValue={user?.userInformation.bio}
+						name="bio"
+						onChange={(e) => {
+							setUserInformation({
+								...userInformation,
+								bio: e.target.value,
+							})
+						}}
+					/>
+					<FormLabel className="bg-transparent">Bio</FormLabel>
+				</FormField>
+				<Button onClick={handleSave} disabled={!changed} loading={loading}>
+					Save
 				</Button>
-				<Button
-					className="danger"
-					onClick={async () => {
-						await requestDeleteProfilePic()
-						getUser()
-					}}
-				>
-					Delete
-				</Button>
-			</FormField>
-			<FormFieldDouble>
-				<div>
-					<FormInput
-						type="text"
-						defaultValue={user?.displayName}
-						name="displayName"
-						onChange={(e) => {
-							setUserData({
-								...userData,
-								displayName: e.target.value,
-							})
-						}}
-					/>
-					<FormLabel>Display Name</FormLabel>
-				</div>
-				<div>
-					<FormInput
-						type="text"
-						defaultValue={user?.userInformation.pronouns}
-						name="pronouns"
-						list="pronouns-list"
-						onChange={(e) => {
-							setUserInformation({
-								...userInformation,
-								pronouns: e.target.value,
-							})
-						}}
-					/>
-					<datalist id="pronouns-list">
-						<option value="He/Him" />
-						<option value="She/Her" />
-						<option value="They/Them" />
-					</datalist>
-					<FormLabel>Pronouns</FormLabel>
-				</div>
-			</FormFieldDouble>
-			<FormFieldDouble>
-				<div>
-					<FormInput
-						type="text"
-						defaultValue={user?.userInformation.location}
-						name="location"
-						onChange={(e) => {
-							setUserInformation({
-								...userInformation,
-								location: e.target.value,
-							})
-						}}
-					/>
-					<FormLabel>Location</FormLabel>
-				</div>
-				<div>
-					<FormInput
-						type="text"
-						defaultValue={user?.userInformation.website}
-						name="website"
-						onChange={(e) => {
-							setUserInformation({
-								...userInformation,
-								website: e.target.value,
-							})
-						}}
-					/>
-					<FormLabel>Website</FormLabel>
-				</div>
-			</FormFieldDouble>
-			<FormField>
-				<FormArea
-					className="bg-transparent"
-					defaultValue={user?.userInformation.bio}
-					name="bio"
-					onChange={(e) => {
-						setUserInformation({
-							...userInformation,
-							bio: e.target.value,
-						})
-					}}
-				/>
-				<FormLabel>Bio</FormLabel>
-			</FormField>
-			<Button
-				onClick={handleSave}
-				disabled={
-					!profilePic &&
-					!userInformation &&
-					!userData.displayName &&
-					!userData.username
-				}
-				loading={loading}
-			>
-				Save
-			</Button>
-		</Section>
+			</Section>
+		</SectionsContainer>
 	)
 }

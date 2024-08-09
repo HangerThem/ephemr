@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { requestEmail } from "@/services/api-services/authService"
 import { isError } from "@/utils/isError"
-import VerifyForm from "@/components/forms/VerifyForm"
+import VerifyForm from "@/components/forms/verifyForm"
 import Link from "next/link"
 
 export default function Page() {

@@ -13,6 +13,34 @@ export const SettingsWrapper = styled.div`
 	overflow: auto;
 `
 
+export const SectionsContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+
+	& > h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+	}
+`
+
+export const Section = styled.section`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+	gap: 0.5rem;
+	margin-top: 1rem;
+	margin-bottom: 2rem;
+
+	& > p {
+		font-size: 1rem;
+		color: rgb(var(--light));
+		margin-bottom: 1rem;
+	}
+`
+
 export const SettingsNav = styled.nav`
 	display: flex;
 	flex-direction: column;
