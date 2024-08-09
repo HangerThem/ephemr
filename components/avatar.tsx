@@ -25,7 +25,7 @@ const OnlineIndicator = styled.div<{
 	right: 0;
 	border-radius: 50%;
 	border: ${({ $borderSize }) => $borderSize}px solid
-	${({ $borderColor }) => $borderColor};
+		${({ $borderColor }) => $borderColor};
 `
 
 const AvatarImage = styled(Image)`
@@ -52,22 +52,22 @@ const Avatar: FC<AvatarProps> = ({
 	radius = 50,
 }) => {
 	const svg = createAvatar(initials, {
-	seed,
-	radius,
-	size,
+		seed,
+		radius,
+		size,
 	}).toDataUri()
 
 	return (
-	<AvatarContainer>
-		<AvatarImage src={src || svg} alt={seed} width={size} height={size} />
-		{online && (
-		<OnlineIndicator
-			$size={size}
-			$borderSize={borderSize}
-			$borderColor={borderColor}
-		/>
-		)}
-	</AvatarContainer>
+		<AvatarContainer>
+			<AvatarImage src={src || svg} alt={seed} width={size} height={size} />
+			{online && (
+				<OnlineIndicator
+					$size={size}
+					$borderSize={borderSize}
+					$borderColor={borderColor}
+				/>
+			)}
+		</AvatarContainer>
 	)
 }
 

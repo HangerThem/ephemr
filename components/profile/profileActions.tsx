@@ -54,7 +54,7 @@ const ProfileActions: FC<ProfileActionsProps> = ({
 					modalOpen={shareModalOpen}
 					toggleModal={setShareModalOpen}
 				/>
-				<Button link="/settings">Edit</Button>
+				<Button link="/settings/profile">Edit</Button>
 				<Button onClick={handleShare}>Share</Button>
 			</ActionContainer>
 		)

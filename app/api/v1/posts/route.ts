@@ -197,6 +197,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 						username: {
 							in: mentions.map((m: string) => m.slice(1)),
 						},
+						settings: {
+							notifications: {
+								equals: true,
+							},
+						},
 					},
 				},
 				select: {

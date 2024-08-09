@@ -81,6 +81,13 @@ export async function POST(
 		const socketsTemp = await prisma.userSession.findMany({
 			where: {
 				userId: isComment.userId || undefined,
+				user: {
+					settings: {
+						notifications: {
+							equals: true,
+						},
+					},
+				},
 			},
 			select: {
 				socketId: true,

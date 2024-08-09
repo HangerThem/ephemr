@@ -43,7 +43,7 @@ export const FormLabel = styled.label`
 	position: absolute;
 	color: rgba(var(--light), 0.5);
 	font-size: 0.8rem;
-	top: -25%;
+	top: -10px;
 	left: 5px;
 	background-color: rgb(var(--dark));
 	padding: 0 0.5rem;
@@ -96,6 +96,10 @@ export const FormCodeInput = styled.input`
 
 	&:focus {
 		border: 1px solid rgb(var(--light));
+
+		& + ${FormLabel} {
+			color: rgb(var(--light));
+		}
 	}
 `
 
@@ -105,7 +109,6 @@ export const FormArea = styled.textarea`
 	color: rgb(var(--light));
 	border: none;
 	border-radius: 0.5rem;
-	font-size: 0.75rem;
 	padding: 0.5rem;
 	resize: none;
 	outline: none;
@@ -113,19 +116,29 @@ export const FormArea = styled.textarea`
 	margin-bottom: 0.5rem;
 	scrollbar-width: none;
 	height: fit-content;
+	min-height: 100px;
 	border: 1px solid rgba(var(--light), 0.2);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+	transition: border 0.2s ease;
+
+	&.bg-transparent {
+		background-color: transparent;
+	}
 
 	&:focus {
 		border: 1px solid rgb(var(--light));
+
+		& + ${FormLabel} {
+			color: rgb(var(--light));
+		}
 	}
 `
 
 export const FormField = styled.div`
 	position: relative;
 	width: 100%;
-	max-width: 350px;
+	max-width: 450px;
 	margin-bottom: 1rem;
 
 	&.error {
@@ -144,6 +157,23 @@ export const FormField = styled.div`
 		${FormLabel} {
 			color: rgb(var(--danger));
 		}
+	}
+
+	&.horizontal {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+`
+
+export const FormFieldDouble = styled(FormField)`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+	width: 100%;
+
+	div {
+		position: relative;
 	}
 `
 

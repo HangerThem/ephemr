@@ -59,6 +59,7 @@ interface ButtonProps {
 	loading?: boolean
 	size?: "small" | "medium" | "large" | "full"
 	type?: "button" | "submit" | "reset"
+	disabled?: boolean
 	className?: string
 	link?: string
 	icon?: React.ReactNode
@@ -71,6 +72,7 @@ export default function Button({
 	size = "medium",
 	type = "button",
 	className,
+	disabled,
 	icon,
 	link,
 	onClick,
@@ -79,6 +81,7 @@ export default function Button({
 		return (
 			<Link href={link}>
 				<ButtonWrapper
+					disabled={disabled}
 					className={className + " " + size}
 					type={type}
 					onClick={onClick}
@@ -94,7 +97,7 @@ export default function Button({
 			className={className + " " + size}
 			type={type}
 			onClick={onClick}
-			disabled={loading}
+			disabled={loading || disabled}
 		>
 			{loading ? (
 				<DotLoader />
