@@ -13,17 +13,26 @@ import {
 	requestUpdateProfilePic,
 	requestUpdateUserInformation,
 } from "@/services/api-services/meService"
+import { requestMoods } from "@/services/api-services/appDataServices"
 import { createAvatar } from "@dicebear/core"
 import { initials } from "@dicebear/collection"
 import Image from "next/image"
 import { useAuth } from "@/context/authContext"
 import styled from "styled-components"
 import Button from "@/components/buttons/button"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import {
 	SectionsContainer,
 	Section,
 } from "@/components/settings/settingsStyles"
+import { CaretDown } from "react-bootstrap-icons"
+import {
+	DropdownContainer,
+	DropdownContent,
+	DropdownItem,
+	DropdownSelection,
+} from "@/components/dropdownStyles"
+import { isError } from "@/utils/isError"
 
 const ProfilePic = styled(Image)`
 	border-radius: 50%;
@@ -31,6 +40,10 @@ const ProfilePic = styled(Image)`
 
 export default function Page() {
 	const { user, getUser } = useAuth()
+	const dropdownRef = useRef<HTMLDivElement>(null)
+	const [dropdown, setDropdown] = useState<boolean>(false)
+	const [dropdownPosition, setDropdownPosition] = useState<string>("top")
+	const [moods, setMoods] = useState<IMood[] | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [profilePic, setProfilePic] = useState<File | null>(null)
 	const [userInformation, setUserInformation] = useState({
@@ -41,6 +54,7 @@ export default function Page() {
 	})
 	const [userData, setUserData] = useState({
 		displayName: user?.displayName,
+		mood: user?.mood,
 		username: user?.username,
 	})
 	const [errors, setErrors] = useState({
@@ -49,12 +63,25 @@ export default function Page() {
 	const [changed, setChanged] = useState(false)
 
 	useEffect(() => {
+		const fetchMoods = async () => {
+			const response = await requestMoods()
+			if (isError(response)) {
+				return
+			}
+
+			setMoods(response.moods)
+		}
+		fetchMoods()
+	}, [])
+
+	useEffect(() => {
 		if (
 			user?.displayName !== userData.displayName ||
 			user?.userInformation.bio !== userInformation.bio ||
 			user?.userInformation.location !== userInformation.location ||
 			user?.userInformation.website !== userInformation.website ||
-			user?.userInformation.pronouns !== userInformation.pronouns
+			user?.userInformation.pronouns !== userInformation.pronouns ||
+			user?.mood?.id !== userData.mood?.id
 		) {
 			setChanged(true)
 		} else {
@@ -79,6 +106,39 @@ export default function Page() {
 				radius: 50,
 				size: 100,
 		  }).toDataUri()
+
+	useEffect(() => {
+		if (dropdown) {
+			const dropdownRect = dropdownRef.current?.getBoundingClientRect()
+			const viewportHeight = window.innerHeight
+
+			if (
+				dropdownRect &&
+				dropdownRect.y + dropdownRect.bottom > viewportHeight
+			) {
+				setDropdownPosition("top")
+			} else {
+				setDropdownPosition("bottom")
+			}
+		}
+	}, [dropdown])
+
+	if (typeof window !== "undefined") {
+		window.addEventListener("click", (e) => {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(e.target as Node)
+			) {
+				setDropdown(false)
+			}
+		})
+
+		window.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") {
+				setDropdown(false)
+			}
+		})
+	}
 
 	return (
 		<SectionsContainer>
@@ -208,6 +268,38 @@ export default function Page() {
 						}}
 					/>
 					<FormLabel className="bg-transparent">Bio</FormLabel>
+				</FormField>
+				<FormField>
+					<DropdownContainer ref={dropdownRef} className="full-width">
+						<DropdownSelection onClick={() => setDropdown(!dropdown)}>
+							<span>
+								{userData.mood?.emoji} {userData.mood?.name}
+							</span>
+							<CaretDown />
+						</DropdownSelection>
+						<DropdownContent
+							$visible={dropdown}
+							$position={dropdownPosition as "top" | "bottom"}
+							className="input-dropdown"
+							onClick={() => setDropdown(false)}
+						>
+							{moods?.map((mood) => (
+								<DropdownItem
+									key={mood.id}
+									onClick={() => {
+										setUserData({
+											...userData,
+											mood: mood,
+										})
+									}}
+								>
+									<span>{mood.emoji}</span>
+									<span>{mood.name}</span>
+								</DropdownItem>
+							))}
+						</DropdownContent>
+					</DropdownContainer>
+					<FormLabel className="bg-transparent">Mood</FormLabel>
 				</FormField>
 				<Button onClick={handleSave} disabled={!changed} loading={loading}>
 					Save

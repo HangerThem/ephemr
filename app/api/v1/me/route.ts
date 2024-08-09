@@ -117,6 +117,11 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 			},
 			data: {
 				...body,
+				mood: {
+					connect: {
+						id: body.mood.id,
+					},
+				},
 			},
 		})
 

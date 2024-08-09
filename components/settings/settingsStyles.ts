@@ -30,7 +30,6 @@ export const Section = styled.section`
 	flex-direction: column;
 	align-items: flex-start;
 	width: 100%;
-	gap: 0.5rem;
 	margin-top: 1rem;
 	margin-bottom: 2rem;
 

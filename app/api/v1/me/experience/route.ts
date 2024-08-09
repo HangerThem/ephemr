@@ -30,36 +30,23 @@ export async function GET(req: NextRequest, res: NextResponse) {
 			return unauthorizedResponse("Invalid token")
 		}
 
-		const privateStatus = await prisma.user.findUnique({
-			where: {
-				id: decoded.id,
-			},
-			select: {
-				private: true,
-			},
-		})
-
-		const showActivityStatus = await prisma.settings.findUnique({
+		const experience = await prisma.settings.findUnique({
 			where: {
 				userId: decoded.id,
 			},
 			select: {
-				activityStatus: true,
+				theme: true,
+				language: true,
 			},
 		})
 
-		if (!privateStatus || !showActivityStatus) {
+		if (!experience) {
 			return notFoundResponse("User not found")
 		}
 
-		return successResponse({
-			privacy: {
-				privateStatus: privateStatus.private,
-				activityStatus: showActivityStatus.activityStatus,
-			},
-		})
+		return successResponse({ experience })
 	} catch (e) {
-		console.error("Error getting user privacy settings: ", e)
+		console.error("Error getting user experience: ", e)
 		return internalServerErrorResponse()
 	}
 }
@@ -84,14 +71,11 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 			return unauthorizedResponse("Invalid token")
 		}
 
-		const { privateStatus, activityStatus } = await req.json()
+		const { theme, language } = await req.json()
 
-		const user = await prisma.user.update({
+		const user = await prisma.settings.findUnique({
 			where: {
-				id: decoded.id,
-			},
-			data: {
-				private: privateStatus,
+				userId: decoded.id,
 			},
 		})
 
@@ -99,23 +83,23 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 			return notFoundResponse("User not found")
 		}
 
-		const settings = await prisma.settings.update({
+		const experience = await prisma.settings.update({
 			where: {
 				userId: decoded.id,
 			},
 			data: {
-				activityStatus,
+				theme,
+				language,
+			},
+			select: {
+				theme: true,
+				language: true,
 			},
 		})
 
-		return successResponse({
-			privacy: {
-				privateStatus: user.private,
-				activityStatus: settings.activityStatus,
-			},
-		})
+		return successResponse({ experience })
 	} catch (e) {
-		console.error("Error updating user notifications: ", e)
+		console.error("Error updating user experience: ", e)
 		return internalServerErrorResponse()
 	}
 }
