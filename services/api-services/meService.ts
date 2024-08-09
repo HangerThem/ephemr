@@ -27,6 +27,19 @@ export const requestUpdateMe = async (
 	})
 }
 
+export const requestDeleteMe = async (): Promise<
+	| {
+			status: number
+			message: string
+	  }
+	| IErrorResponse
+> => {
+	return await requestDelete<{
+		status: number
+		message: string
+	}>("/me", {})
+}
+
 export const requestUpdateUserInformation = async (
 	userInformation: IUpdatreUserInformation
 ): Promise<

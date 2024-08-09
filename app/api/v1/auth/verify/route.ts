@@ -43,7 +43,9 @@ export async function POST(req: any) {
 			return unauthorizedResponse("User not found")
 		}
 
-		if (user.verificationCode !== code) {
+		console.log(user.verificationCode, code)
+
+		if (user.verificationCode != code) {
 			return unauthorizedResponse("Invalid code")
 		}
 

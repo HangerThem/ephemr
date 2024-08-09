@@ -19,7 +19,7 @@ import Button from "@/components/buttons/button"
 import { useState } from "react"
 
 export default function RegisterForm() {
-	const { register, toggleModal } = useAuth()
+	const { register } = useAuth()
 	const [errors, setErrors] = useState<RegisterResponse>()
 	const [showPassword, setShowPassword] = useState(false)
 	const [loading, setLoading] = useState(false)
@@ -72,7 +72,6 @@ export default function RegisterForm() {
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<FormClose onClick={toggleModal} />
 			<FormTitle>Register</FormTitle>
 			<FormField
 				className={errors?.emailInUse || errors?.invalidEmail ? "error" : ""}

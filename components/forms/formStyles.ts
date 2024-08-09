@@ -23,6 +23,11 @@ export const FormTitle = styled.h1`
 	color: rgb(var(--light));
 `
 
+export const FormSubtitle = styled.p`
+	font-size: 0.9rem;
+	color: rgba(var(--light), 0.5);
+`
+
 export const FormClose = styled(X)`
 	position: absolute;
 	top: 10px;

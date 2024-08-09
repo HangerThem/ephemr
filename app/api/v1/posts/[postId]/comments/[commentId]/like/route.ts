@@ -154,14 +154,15 @@ export async function POST(
 		const response = {
 			...comment,
 			isLiked: true,
-			user: {
-				id: comment?.user?.id,
-				username: comment?.user?.username,
-				displayName: comment?.user?.displayName,
-				lastSeen: activityStatus ? comment.user?.lastSeen : null,
-				online: activityStatus ? comment.user?.online : false,
-				profilePic: comment?.user?.profilePic,
-			},
+			user:
+				{
+					id: comment?.user?.id,
+					username: comment?.user?.username,
+					displayName: comment?.user?.displayName,
+					lastSeen: activityStatus ? comment.user?.lastSeen : null,
+					online: activityStatus ? comment.user?.online : false,
+					profilePic: comment?.user?.profilePic,
+				} || null,
 		}
 
 		return successResponse({ comment: response })

@@ -36,6 +36,10 @@ const ProfileLink = styled(Link)`
 	gap: 0.5rem;
 	color: rgb(var(--light));
 	text-decoration: none;
+
+	&.deleted {
+		cursor: default;
+	}
 `
 
 const ProfileWrapper = styled.div`
@@ -145,15 +149,19 @@ const PostCard = ({ postData }: IPostSimpleCardProps) => {
 	return (
 		<Card>
 			<Info>
-				<ProfileLink href={`/${post.user.username}`}>
+				<ProfileLink
+					href={`/${post.user?.username || ""}`}
+					className={post.user ? "" : "deleted"}
+				>
 					<Avatar
-						seed={post.user.displayName}
+						src={post.user?.profilePic}
+						seed={post.user?.displayName || "deleted"}
 						size={30}
-						online={post.user.online}
+						online={post.user?.online}
 					/>
 					<ProfileWrapper>
-						<h3>{post.user.displayName}</h3>
-						<p>@{post.user.username}</p>
+						<h3>{post.user?.displayName || "Deleted User"}</h3>
+						<p>@{post.user?.username || "deleted"}</p>
 					</ProfileWrapper>
 				</ProfileLink>
 				<p>{timeSince(new Date(post.createdAt))}</p>

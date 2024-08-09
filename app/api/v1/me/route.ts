@@ -127,6 +127,49 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 	}
 }
 
+export async function DELETE(req: NextRequest, res: NextResponse) {
+	try {
+		const authHeader = req.headers.get("Authorization")
+		const token =
+			authHeader && authHeader.startsWith("Bearer ")
+				? authHeader.split(" ")[1]
+				: null
+		if (!token) {
+			return badRequestResponse("No token provided")
+		}
+
+		let decoded
+
+		try {
+			decoded = verifyToken(token)
+		} catch (e) {
+			console.error("Error verifying token: ", e)
+			return unauthorizedResponse("Invalid token")
+		}
+
+		const user = await prisma.user.findUnique({
+			where: {
+				id: decoded.id,
+			},
+		})
+
+		if (!user) {
+			return notFoundResponse("User not found")
+		}
+
+		await prisma.user.delete({
+			where: {
+				id: user.id,
+			},
+		})
+
+		return successResponse({ message: "User deleted" })
+	} catch (e) {
+		console.error("Error deleting user: ", e)
+		return internalServerErrorResponse()
+	}
+}
+
 export async function OPTIONS() {
 	return optionsResponse({
 		"Access-Control-Allow-Origin": "*",

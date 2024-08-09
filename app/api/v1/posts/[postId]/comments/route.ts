@@ -105,6 +105,13 @@ export async function GET(
 		}
 
 		const response = comments.map((comment) => {
+			if (!comment.user) {
+				return {
+					...comment,
+					user: null,
+				}
+			}
+
 			const user = comment?.user as IUserSimple
 			const activityStatus = comment.user?.settings?.activityStatus
 
@@ -220,14 +227,15 @@ export async function POST(
 		const response = {
 			...comment,
 			isLiked: true,
-			user: {
-				id: comment?.user?.id,
-				username: comment?.user?.username,
-				displayName: comment?.user?.displayName,
-				profilePic: comment?.user?.profilePic,
-				lastSeen: activityStatus ? comment.user?.lastSeen : null,
-				online: activityStatus ? comment.user?.online : false,
-			},
+			user:
+				{
+					id: comment?.user?.id,
+					username: comment?.user?.username,
+					displayName: comment?.user?.displayName,
+					profilePic: comment?.user?.profilePic,
+					lastSeen: activityStatus ? comment.user?.lastSeen : null,
+					online: activityStatus ? comment.user?.online : false,
+				} || null,
 		}
 
 		return createdResponse({ comment: response })

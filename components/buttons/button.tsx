@@ -65,7 +65,7 @@ interface ButtonProps {
 	className?: string
 	link?: string
 	icon?: React.ReactNode
-	onClick?: () => void
+	onClick?: any
 }
 
 export default function Button({

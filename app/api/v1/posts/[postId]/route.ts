@@ -81,15 +81,16 @@ export async function GET(
 		}
 
 		const activityStatus = post.user?.settings?.activityStatus
-		const user = {
-			id: post.user?.id,
-			username: post.user?.username,
-			displayName: post.user?.displayName,
-			profilePic: post.user?.profilePic,
-			lastSeen: activityStatus ? post.user?.lastSeen : null,
-			online: activityStatus ? post.user?.online : false,
-			mood: post.user?.mood,
-		}
+		const user =
+			{
+				id: post.user?.id,
+				username: post.user?.username,
+				displayName: post.user?.displayName,
+				profilePic: post.user?.profilePic,
+				lastSeen: activityStatus ? post.user?.lastSeen : null,
+				online: activityStatus ? post.user?.online : false,
+				mood: post.user?.mood,
+			} || null
 
 		const responseTemp = {
 			...post,

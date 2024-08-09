@@ -78,53 +78,55 @@ const ToastContainer = () => {
 	const { toastNotifications, removeToastNotification } = useToast()
 
 	const getIcon = (type: ToastNotificationFull["type"]) => {
-	const iconSize = 36
-	switch (type) {
-		case "info":
-		return <InfoCircle size={iconSize} />
-		case "error":
-		return <XCircle size={iconSize} />
-		case "warning":
-		return <ExclamationTriangle size={iconSize} />
-		case "success":
-		return <Check2Circle size={iconSize} />
-		default:
-		return <InfoCircle size={iconSize} />
-	}
+		const iconSize = 36
+		switch (type) {
+			case "info":
+				return <InfoCircle size={iconSize} />
+			case "error":
+				return <XCircle size={iconSize} />
+			case "warning":
+				return <ExclamationTriangle size={iconSize} />
+			case "success":
+				return <Check2Circle size={iconSize} />
+			default:
+				return <InfoCircle size={iconSize} />
+		}
 	}
 
 	return (
-	<Container>
-		{toastNotifications.map((toast) => (
-		<Toast
-			key={toast.id}
-			href={toast.link || "#"}
-			$link={toast.link !== undefined}
-		>
-			<ToastInfo>
-			<ToastIcon>
-				{toast.type === "push" ? (
-				<Avatar 
-				src={toast?.src || ""}
-				seed={toast?.seed || ""} size={36} />
-				) : (
-				getIcon(toast.type)
-				)}
-			</ToastIcon>
-			<div>
-				<ToastTitle>{toast.title}</ToastTitle>
-				<ToastMessage>{toast.description}</ToastMessage>
-			</div>
-			</ToastInfo>
-			<ToastClose
-			onClick={(e) => {
-				e.stopPropagation()
-				removeToastNotification(toast.id)
-			}}
-			/>
-		</Toast>
-		))}
-	</Container>
+		<Container>
+			{toastNotifications.map((toast) => (
+				<Toast
+					key={toast.id}
+					href={toast.link || "#"}
+					$link={toast.link !== undefined}
+				>
+					<ToastInfo>
+						<ToastIcon>
+							{toast.type === "push" ? (
+								<Avatar
+									src={toast?.src || ""}
+									seed={toast?.seed || ""}
+									size={36}
+								/>
+							) : (
+								getIcon(toast.type)
+							)}
+						</ToastIcon>
+						<div>
+							<ToastTitle>{toast.title}</ToastTitle>
+							<ToastMessage>{toast.description}</ToastMessage>
+						</div>
+					</ToastInfo>
+					<ToastClose
+						onClick={(e) => {
+							e.stopPropagation()
+							removeToastNotification(toast.id)
+						}}
+					/>
+				</Toast>
+			))}
+		</Container>
 	)
 }
 

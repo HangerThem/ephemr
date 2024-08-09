@@ -24,7 +24,6 @@ import {
 } from "@/components/settings/settingsStyles"
 import { emailRegex } from "@/constants/emailRegex"
 import { isError } from "@/utils/isError"
-import { set } from "date-fns"
 
 export default function Page() {
 	const [showPassword, setShowPassword] = useState(false)

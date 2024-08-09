@@ -25,7 +25,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 	children,
 }: ToastProviderProps): React.ReactElement => {
 	const [toastNotifications, setToastNotifications] = useState<
-	ToastNotificationFull[]
+		ToastNotificationFull[]
 	>([])
 
 	/**
@@ -34,26 +34,26 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 	 * @returns {void}
 	 */
 	const addToastNotification = (
-	toastNotification: ToastNotificationSimple
+		toastNotification: ToastNotificationSimple
 	): void => {
-	const id = crypto.randomBytes(16).toString("hex")
-	setToastNotifications((prevToasts) => [
-		...prevToasts,
-		{
-		...toastNotification,
-		id,
-		ttl: toastNotification.ttl || 5000,
-		},
-	])
+		const id = crypto.randomBytes(16).toString("hex")
+		setToastNotifications((prevToasts) => [
+			...prevToasts,
+			{
+				...toastNotification,
+				id,
+				ttl: toastNotification.ttl || 5000,
+			},
+		])
 
-	const audio = new Audio("/sounds/notification.mp3")
-	if (audio.canPlayType("audio/mpeg")) {
-		audio.play()
-	} else {
-		console.error("Audio not supported")
-	}
+		const audio = new Audio("/sounds/notification.mp3")
+		if (audio.canPlayType("audio/mpeg")) {
+			audio.play()
+		} else {
+			console.error("Audio not supported")
+		}
 
-	setTimeout(() => removeToastNotification(id), toastNotification.ttl || 5000)
+		setTimeout(() => removeToastNotification(id), toastNotification.ttl || 5000)
 	}
 
 	/**
@@ -62,21 +62,21 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 	 * @returns {void}
 	 */
 	const removeToastNotification = (id: string): void => {
-	setToastNotifications((prevToasts) =>
-		prevToasts.filter((toast) => toast.id !== id)
-	)
+		setToastNotifications((prevToasts) =>
+			prevToasts.filter((toast) => toast.id !== id)
+		)
 	}
 
 	return (
-	<ToastContext.Provider
-		value={{
-		toastNotifications,
-		addToastNotification,
-		removeToastNotification,
-		}}
-	>
-		{children}
-	</ToastContext.Provider>
+		<ToastContext.Provider
+			value={{
+				toastNotifications,
+				addToastNotification,
+				removeToastNotification,
+			}}
+		>
+			{children}
+		</ToastContext.Provider>
 	)
 }
 
@@ -87,7 +87,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 export const useToast = (): ToastContextProps => {
 	const context = useContext(ToastContext)
 	if (context === undefined) {
-	throw new Error("useToast must be used within a ToastProvider")
+		throw new Error("useToast must be used within a ToastProvider")
 	}
 	return context
 }

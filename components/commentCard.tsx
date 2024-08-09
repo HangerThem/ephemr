@@ -40,6 +40,10 @@ const ProfileLink = styled(Link)`
 	gap: 0.5rem;
 	color: rgb(var(--light));
 	text-decoration: none;
+
+	&.deleted {
+		cursor: default;
+	}
 `
 
 const ProfileWrapper = styled.div`
@@ -149,15 +153,19 @@ const CommentCard = ({ commentData }: ICommentCardProps) => {
 	return (
 		<Card>
 			<Info>
-				<ProfileLink href={`/${comment.user.username}`}>
+				<ProfileLink
+					href={`/${comment.user?.username || ""}`}
+					className={comment.user ? "" : "deleted"}
+				>
 					<Avatar
-						seed={comment.user.displayName}
+						src={comment.user?.profilePic}
+						seed={comment.user?.displayName || "deleted"}
 						size={30}
-						online={comment.user.online}
+						online={comment.user?.online}
 					/>
 					<ProfileWrapper>
-						<h3>{comment.user.displayName}</h3>
-						<p>@{comment.user.username}</p>
+						<h3>{comment.user?.displayName || "Deleted User"}</h3>
+						<p>@{comment.user?.username || "deleted"}</p>
 					</ProfileWrapper>
 				</ProfileLink>
 				<p>{timeSince(new Date(comment.createdAt))}</p>

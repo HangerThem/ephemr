@@ -158,14 +158,15 @@ export async function POST(
 		const post = {
 			...postTemp,
 			isLiked: true,
-			user: {
-				id: postTemp?.user?.id,
-				username: postTemp?.user?.username,
-				displayName: postTemp?.user?.displayName,
-				profilePic: postTemp?.user?.profilePic,
-				lastSeen: activityStatus ? postTemp.user?.lastSeen : null,
-				online: activityStatus ? postTemp.user?.online : false,
-			},
+			user:
+				{
+					id: postTemp?.user?.id,
+					username: postTemp?.user?.username,
+					displayName: postTemp?.user?.displayName,
+					profilePic: postTemp?.user?.profilePic,
+					lastSeen: activityStatus ? postTemp.user?.lastSeen : null,
+					online: activityStatus ? postTemp.user?.online : false,
+				} || null,
 		}
 
 		return successResponse({ post: post })

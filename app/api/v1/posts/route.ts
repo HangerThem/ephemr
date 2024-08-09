@@ -95,6 +95,13 @@ export async function GET(req: NextRequest, res: NextResponse) {
 		}
 
 		const response = posts.map((post) => {
+			if (!post.user) {
+				return {
+					...post,
+					user: null,
+				}
+			}
+
 			const user = post?.user as IUserSimple
 			const activityStatus = post.user?.settings?.activityStatus
 

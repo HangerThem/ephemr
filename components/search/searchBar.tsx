@@ -28,8 +28,8 @@ const SearchContainer = styled.div`
 	transition: border 0.2s;
 
 	&.active {
-	border-radius: 1rem 1rem 0 0;
-	border: 1px solid rgba(var(--light), 0.2);
+		border-radius: 1rem 1rem 0 0;
+		border: 1px solid rgba(var(--light), 0.2);
 	}
 `
 
@@ -74,7 +74,7 @@ const SerachResult = styled(Link)`
 	width: 100%;
 
 	&:hover {
-	background-color: rgba(var(--light), 0.1);
+		background-color: rgba(var(--light), 0.1);
 	}
 `
 
@@ -89,13 +89,13 @@ const ProfileWrapper = styled.div`
 	flex-direction: column;
 
 	h3 {
-	font-size: 1rem;
-	font-weight: 500;
+		font-size: 1rem;
+		font-weight: 500;
 	}
 
 	p {
-	font-size: 0.75rem;
-	color: rgba(var(--light), 0.5);
+		font-size: 0.75rem;
+		color: rgba(var(--light), 0.5);
 	}
 `
 
@@ -108,103 +108,103 @@ const SearchBar = () => {
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleSearch = async (query: string) => {
-	const response = await requestSearchUsers(query)
+		const response = await requestSearchUsers(query)
 
-	if (isError(response)) {
-		return
-	}
+		if (isError(response)) {
+			return
+		}
 
-	setSearchResult(response.users)
+		setSearchResult(response.users)
 	}
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-	e.preventDefault()
-	if (!searchQuery.trim()) return
-	router.push(`/search?q=${searchQuery}`)
-	inputRef.current?.blur()
-	setSearchOpen(false)
+		e.preventDefault()
+		if (!searchQuery.trim()) return
+		router.push(`/search?q=${searchQuery}`)
+		inputRef.current?.blur()
+		setSearchOpen(false)
 	}
 
 	if (typeof window !== "undefined") {
-	window.addEventListener("click", (e) => {
-		if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-		setSearchOpen(false)
-		}
-	})
+		window.addEventListener("click", (e) => {
+			if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+				setSearchOpen(false)
+			}
+		})
 
-	window.addEventListener("keydown", (e) => {
-		if (e.key === "Escape") {
-		setSearchOpen(false)
-		}
-	})
+		window.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") {
+				setSearchOpen(false)
+			}
+		})
 	}
 
 	return (
-	<Container ref={searchRef}>
-		<SearchContainer
-		onClick={() => {
-			setSearchOpen(true)
-			inputRef.current?.focus()
-			handleSearch(searchQuery)
-		}}
-		className={searchOpen && searchResult ? "active" : ""}
-		>
-		<SearchIcon
-			onClick={(e) => {
-			e.stopPropagation()
-			if (searchOpen) {
-				inputRef.current?.blur()
-				setSearchOpen(false)
-			} else {
-				setSearchOpen(true)
-				inputRef.current?.focus()
-			}
-			}}
-		/>
-		<form onSubmit={handleSubmit}>
-			<Input
-			name="q"
-			autoComplete="off"
-			type="text"
-			placeholder="Search"
-			ref={inputRef}
-			onChange={(e) => {
-				setSearchQuery(e.target.value)
-				handleSearch(e.target.value)
-			}}
-			/>
-		</form>
-		</SearchContainer>
-		{searchOpen && searchResult && (
-		<SearchResults>
-			{searchResult.length > 0 ? (
-			searchResult.map((user) => (
-				<SerachResult
-				key={user.id}
-				href={`/${user.username}`}
-				passHref
-				onClick={() => setSearchOpen(false)}
-				>
-				<Avatar
-					seed={user.displayName}
-					src={user.profilePic}
-					size={30}
-					online={user.online}
+		<Container ref={searchRef}>
+			<SearchContainer
+				onClick={() => {
+					setSearchOpen(true)
+					inputRef.current?.focus()
+					handleSearch(searchQuery)
+				}}
+				className={searchOpen && searchResult ? "active" : ""}
+			>
+				<SearchIcon
+					onClick={(e) => {
+						e.stopPropagation()
+						if (searchOpen) {
+							inputRef.current?.blur()
+							setSearchOpen(false)
+						} else {
+							setSearchOpen(true)
+							inputRef.current?.focus()
+						}
+					}}
 				/>
-				<ProfileWrapper>
-					<h3>{user.displayName}</h3>
-					<p>@{user.username}</p>
-				</ProfileWrapper>
-				</SerachResult>
-			))
-			) : (
-			<SerachNoResult>
-				<p>No results found</p>
-			</SerachNoResult>
+				<form onSubmit={handleSubmit}>
+					<Input
+						name="q"
+						autoComplete="off"
+						type="text"
+						placeholder="Search"
+						ref={inputRef}
+						onChange={(e) => {
+							setSearchQuery(e.target.value)
+							handleSearch(e.target.value)
+						}}
+					/>
+				</form>
+			</SearchContainer>
+			{searchOpen && searchResult && (
+				<SearchResults>
+					{searchResult.length > 0 ? (
+						searchResult.map((user) => (
+							<SerachResult
+								key={user.id}
+								href={`/${user.username}`}
+								passHref
+								onClick={() => setSearchOpen(false)}
+							>
+								<Avatar
+									src={user.profilePic}
+									seed={user.displayName}
+									size={30}
+									online={user.online}
+								/>
+								<ProfileWrapper>
+									<h3>{user.displayName}</h3>
+									<p>@{user.username}</p>
+								</ProfileWrapper>
+							</SerachResult>
+						))
+					) : (
+						<SerachNoResult>
+							<p>No results found</p>
+						</SerachNoResult>
+					)}
+				</SearchResults>
 			)}
-		</SearchResults>
-		)}
-	</Container>
+		</Container>
 	)
 }
 
