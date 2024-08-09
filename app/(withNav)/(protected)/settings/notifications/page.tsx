@@ -10,7 +10,6 @@ import {
 	SectionsContainer,
 } from "@/components/settings/settingsStyles"
 import Switch from "@/components/inputs/switch"
-import { useAuth } from "@/context/authContext"
 import { useEffect, useState } from "react"
 import { isError } from "@/utils/isError"
 
@@ -58,7 +57,21 @@ export default function Page() {
 		<SectionsContainer>
 			<h2>Notifications</h2>
 			<Section>
-				<FormField className="horizontal">
+				<FormField className="horizontal space-between">
+					<p>In-app notifications</p>
+					<Switch
+						checked={notifications.inAppNotifications}
+						onChange={() => {
+							const updatedNotifications = {
+								...notifications,
+								inAppNotifications: !notifications.inAppNotifications,
+							}
+							setNotifications(updatedNotifications)
+							saveNotifications(updatedNotifications)
+						}}
+					/>
+				</FormField>
+				<FormField className="horizontal space-between">
 					<p>Push notifications</p>
 					<Switch
 						checked={notifications.pushNotifications}
@@ -72,7 +85,7 @@ export default function Page() {
 						}}
 					/>
 				</FormField>
-				<FormField className="horizontal">
+				<FormField className="horizontal space-between">
 					<p>Email notifications</p>
 					<Switch
 						checked={notifications.emailNotifications}
@@ -80,20 +93,6 @@ export default function Page() {
 							const updatedNotifications = {
 								...notifications,
 								emailNotifications: !notifications.emailNotifications,
-							}
-							setNotifications(updatedNotifications)
-							saveNotifications(updatedNotifications)
-						}}
-					/>
-				</FormField>
-				<FormField className="horizontal">
-					<p>In-app notifications</p>
-					<Switch
-						checked={notifications.inAppNotifications}
-						onChange={() => {
-							const updatedNotifications = {
-								...notifications,
-								inAppNotifications: !notifications.inAppNotifications,
 							}
 							setNotifications(updatedNotifications)
 							saveNotifications(updatedNotifications)

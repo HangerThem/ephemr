@@ -171,8 +171,11 @@ export const FormField = styled.div`
 	&.horizontal {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		gap: 1rem;
+
+		&.space-between {
+			justify-content: space-between;
+		}
 	}
 `
 

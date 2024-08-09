@@ -7,6 +7,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Theme {
+  DARK
+  LIGHT
+}
+
+enum Language {
+  EN
+  ES
+  FR
+}
+
 model User {
   id               String           @id @default(cuid())
   email            String           @unique
@@ -137,8 +148,8 @@ model Settings {
   id                 String   @id @default(cuid())
   user               User     @relation("UserToSettings", fields: [userId], references: [id], onDelete: Cascade)
   userId             String   @unique
-  theme              String   @default("dark")
-  language           String   @default("en")
+  theme              Theme    @default(DARK)
+  language           Language @default(EN)
   inAppNotifications Boolean  @default(true)
   pushNotifications  Boolean  @default(true)
   emailNotifications Boolean  @default(false)
