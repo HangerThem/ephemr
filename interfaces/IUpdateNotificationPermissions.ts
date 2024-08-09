@@ -1,0 +1,1 @@
+interface IUpdateNotificationPermissions extends INotificationPermissions {}

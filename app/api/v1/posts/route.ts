@@ -205,7 +205,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 							in: mentions.map((m: string) => m.slice(1)),
 						},
 						settings: {
-							notifications: {
+							inAppNotifications: {
 								equals: true,
 							},
 						},

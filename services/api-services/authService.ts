@@ -105,7 +105,7 @@ export const requestUpdateEmail = async (
 }
 
 export const requestUpdatePassword = async (
-	passwords: IUpdatePasswords
+	passwords: IUpdatePassword
 ): Promise<
 	| {
 			status: number

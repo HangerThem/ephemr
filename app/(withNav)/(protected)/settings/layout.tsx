@@ -23,6 +23,12 @@ export default function Layout({
 				<Link href="/settings/profile" passHref>
 					Profile
 				</Link>
+				<Link href="/settings/privacy" passHref>
+					Privacy
+				</Link>
+				<Link href="/settings/experience" passHref>
+					Experience
+				</Link>
 				<Link href="/settings/security" passHref>
 					Security
 				</Link>

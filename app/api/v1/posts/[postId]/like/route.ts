@@ -88,7 +88,7 @@ export async function POST(
 				userId: isPost.userId || undefined,
 				user: {
 					settings: {
-						notifications: {
+						inAppNotifications: {
 							equals: true,
 						},
 					},

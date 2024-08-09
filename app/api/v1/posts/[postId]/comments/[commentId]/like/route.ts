@@ -83,7 +83,7 @@ export async function POST(
 				userId: isComment.userId || undefined,
 				user: {
 					settings: {
-						notifications: {
+						inAppNotifications: {
 							equals: true,
 						},
 					},

@@ -139,7 +139,8 @@ model Settings {
   userId             String   @unique
   theme              String   @default("dark")
   language           String   @default("en")
-  notifications      Boolean  @default(true)
+  inAppNotifications Boolean  @default(true)
+  pushNotifications  Boolean  @default(true)
   emailNotifications Boolean  @default(false)
   activityStatus     Boolean  @default(false)
   createdAt          DateTime @default(now())
